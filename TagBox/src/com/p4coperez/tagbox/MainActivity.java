@@ -17,11 +17,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
+	private static final int STATIC_INTEGER_VALUE_CONFIG_UPDATE = 4357;
+	private static final int STATIC_INTEGER_VALUE_CONFIG_ACTUAL = 0000;
 	EditText et1;
 	EditText et2;
+	TextView tv1;
+	TextView tv2;
 	
 	
 	@Override
@@ -33,6 +38,13 @@ public class MainActivity extends Activity {
 		//et1.setText(text1.getText().toString());
 		//et1.setText(text2.getText().toString());
 		
+		/*SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		tv1 = (TextView) findViewById(R.id.textView1);
+		tv1.setText(preferences.getString("route", "/sdcard/")); 
+		*/
+		Intent p = new Intent(this, Configuration.class);
+		p.putExtra("itemSelected",false);
+		startActivityForResult(p,STATIC_INTEGER_VALUE_CONFIG_ACTUAL);
 		
 		
 	}
@@ -50,7 +62,8 @@ public class MainActivity extends Activity {
 		switch (item.getItemId()) {
 		case R.id.config:
 			Intent p = new Intent(this, Configuration.class);
-			startActivity(p);
+			p.putExtra("itemSelected",true);
+			startActivityForResult(p,STATIC_INTEGER_VALUE_CONFIG_UPDATE);
 			break;
 		
 		case R.id.aboutto:
@@ -62,6 +75,21 @@ public class MainActivity extends Activity {
 		return true;
 	}
 	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data){
+		
+		if (requestCode==STATIC_INTEGER_VALUE_CONFIG_UPDATE && resultCode== RESULT_OK ){
+			Intent refresh = new Intent(this, MainActivity.class);
+		    startActivity(refresh);
+		    this.finish();
+			//tv1 = (TextView) findViewById(R.id.textView1);
+			//tv1.setText(data.getStringExtra("path"));
+		}
+		if (requestCode==STATIC_INTEGER_VALUE_CONFIG_ACTUAL && resultCode== RESULT_OK && data.getStringExtra("path")!="" ){
+			tv1 = (TextView) findViewById(R.id.textView1);
+			tv1.setText(data.getStringExtra("path")); 
+		}
+	}
 
 	public void grabar(View v) {
 		String nomarchivo = et1.getText().toString();
