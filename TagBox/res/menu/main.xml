@@ -3,9 +3,10 @@
     tools:context="com.p4coperez.tagbox.MainActivity" >
 
     <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_settings"/>
+        android:id="@+id/config"
+        android:title="@string/config"/>
+    <item
+        android:id="@+id/aboutto"
+        android:title="@string/aboutto"/>
 
 </menu>

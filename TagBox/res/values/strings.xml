@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+	<string name="route">route</string>
+    
+<!--   SPANISH
+ 	<string name="app_name">TagBox</string>
+    <string name="aboutto">Acerca de &#8230;</string>
+    <string name="config">Configuración</string>
+    <string name="route_title">Seleccionar ruta</string>
+    <string name="route_text">Ruta compartida con Dropbox\n</string>
+    <string name="aboutto_text">Fácil control de las compras y aplicación sincronizada con dropbox.\n\nEste programa ha sido desarrollado por @p4coperez.</string>
+-->
     <string name="app_name">TagBox</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="hola_mundo">Hola Mundo</string>
-
+    <string name="aboutto">About to &#8230;</string>
+    <string name="config">Configuration</string>
+    <string name="route_title">Select path</string>
+    <string name="route_text">Route shared with Dropbox\n</string>
+    <string name="aboutto_text">Easy to control purchases and synchronized application with dropbox.\n\nThis program has been developed by @p4coperez.</string>
+    
 </resources>
