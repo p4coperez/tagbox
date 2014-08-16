@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     tools:context=".MainActivity" >
 
     <TextView
@@ -10,52 +11,34 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="Nombre del archivo" />
-
-    <EditText
-        android:id="@+id/editText1"
+        android:visibility="invisible"
+         />
+    
+   
+    <ImageButton
+        android:id="@+id/imageButtonArchive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1"
-        android:ems="10" >
+        android:layout_below="@android:id/list"
+        android:layout_marginLeft="23dp"
+        android:layout_marginTop="26dp"
+        android:src="@drawable/ic_launcher_archive"/>
 
-        <requestFocus />
-    </EditText>
-
-    <TextView
-        android:id="@+id/textView2"
+    <ImageButton
+        android:id="@+id/imageButtonSync"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/editText1"
-        android:text="Contenido" />
+        android:layout_below="@+id/list"
+        android:layout_marginLeft="23dp"
+        android:layout_marginTop="26dp"
+        android:layout_toRightOf="@+id/imageButtonArchive"
+        android:src="@drawable/ic_launcher_sync" />
 
-    <EditText
-        android:id="@+id/editText2"
+    <ListView
+        android:id="@android:id/list"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView2"
-        android:ems="10" />
+        android:layout_height="wrap_content" >
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/editText2"
-        android:onClick="grabar"
-        android:text="Grabar" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/button1"
-        android:layout_alignBottom="@+id/button1"
-        android:layout_toRightOf="@+id/button1"
-        android:onClick="recuperar"
-        android:text="Recuperar" />
+    </ListView>
 
 </RelativeLayout>

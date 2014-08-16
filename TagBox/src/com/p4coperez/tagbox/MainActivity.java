@@ -1,5 +1,19 @@
 package com.p4coperez.tagbox;
 
+/*
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import android.os.Environment;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
+*/
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,32 +22,36 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
+
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+
+public class MainActivity extends ListActivity {
 	private static final int STATIC_INTEGER_VALUE_CONFIG_UPDATE = 4357;
 	private static final int STATIC_INTEGER_VALUE_CONFIG_ACTUAL = 0000;
-	EditText et1;
-	EditText et2;
+
 	TextView tv1;
-	TextView tv2;
+	ImageView iv1;
+	ImageView iv2;
+
 	
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		setListAdapter(null);
 		
 		//et1.setText(text1.getText().toString());
 		//et1.setText(text2.getText().toString());
@@ -91,7 +109,60 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	public void grabar(View v) {
+	
+	public void sync(View v) {
+		tv1 = (TextView) findViewById(R.id.textView1);
+		iv1 = (ImageView) findViewById(R.id.imageButtonSync);
+		String filename = tv1.getText().toString();;
+		try {
+			File tarjeta = Environment.getExternalStorageDirectory();
+			File file = new File(tarjeta.getAbsolutePath(), filename);
+
+				// Restore file from Dropbox path on tv1
+				FileInputStream fIn = new FileInputStream(file);
+				InputStreamReader archivo = new InputStreamReader(fIn);
+				BufferedReader br = new BufferedReader(archivo);
+				String linea = br.readLine();
+				String todo = "";
+				while (linea != null) {
+					todo = todo + linea + "\n";
+					linea = br.readLine();
+				}
+				br.close();
+				archivo.close();
+				//iv1.setImageResource(R.id.imageButtonSync);
+				
+				// todo : show in listview
+				
+		} catch (IOException e) {
+		}
+	}
+	
+	public void archive(View v) {
+		tv1 = (TextView) findViewById(R.id.textView1);
+		iv1 = (ImageView) findViewById(R.id.imageButtonArchive);
+		
+		String filename = tv1.getText().toString();
+		String contenido = "contenido";
+		
+		try {
+			File tarjeta = Environment.getExternalStorageDirectory();
+			File file = new File(tarjeta.getAbsolutePath(), filename);
+			OutputStreamWriter osw = new OutputStreamWriter(
+					new FileOutputStream(file));
+			osw.write(contenido);
+			osw.flush();
+			osw.close();
+			Toast.makeText(this, "Los datos fueron grabados correctamente",
+					Toast.LENGTH_SHORT).show();
+			
+			//iv1.setImageResource(R.id.imageButtonArchive);
+		} catch (IOException e) {
+		}
+	}
+/**
+ 	public void grabar(View v) {
+ 
 		String nomarchivo = et1.getText().toString();
 		String contenido = et2.getText().toString();
 		try {
@@ -131,5 +202,5 @@ public class MainActivity extends Activity {
 		} catch (IOException e) {
 		}
 	}
-
+*/
 }
