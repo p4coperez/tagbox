@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <EditTextPreference
     
-    android:id="@+id/TextView01"
+    android:id="@+id/TextViewRoute"
     android:key="@string/route"
     android:title="@string/route_title"
     android:summary="@string/route_text"

@@ -1,44 +1,47 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
+    android:gravity="end"
+    android:orientation="vertical"
     tools:context=".MainActivity" >
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:visibility="invisible"
-         />
-    
-   
-    <ImageButton
-        android:id="@+id/imageButtonArchive"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@android:id/list"
-        android:layout_marginLeft="23dp"
-        android:layout_marginTop="26dp"
-        android:src="@drawable/ic_launcher_archive"/>
-
-    <ImageButton
-        android:id="@+id/imageButtonSync"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/list"
-        android:layout_marginLeft="23dp"
-        android:layout_marginTop="26dp"
-        android:layout_toRightOf="@+id/imageButtonArchive"
-        android:src="@drawable/ic_launcher_sync" />
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
-
+        android:layout_height="72dp"
+        android:layout_weight="0.29" >
     </ListView>
 
-</RelativeLayout>
+    <Button
+        android:id="@+id/buttonSync"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="23dp"
+        android:layout_marginTop="26dp"
+        android:background="@drawable/button_sync_effect"
+        android:contentDescription="@string/text_sync_button" />
+
+    <Button
+        android:id="@+id/buttonArchive"
+        android:layout_width="51dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="23dp"
+        android:layout_marginTop="26dp"
+        android:background="@drawable/button_archive_effect"
+        android:contentDescription="@string/text_archive_button" />
+
+    <TextView
+        android:id="@+id/textViewRouteConfig"
+        android:layout_width="73dp"
+        android:layout_height="wrap_content"
+        android:visibility="invisible" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

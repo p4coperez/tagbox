@@ -9,6 +9,8 @@
     <string name="route_title">Seleccionar ruta</string>
     <string name="route_text">Ruta compartida con Dropbox</string>
     <string name="aboutto_text">Fácil control de las compras y aplicación sincronizada con dropbox.\n\nEste programa ha sido desarrollado por @p4coperez.</string>
+    <string name="text_archive_button">Pulsame para guardar la lista</string>
+    <string name="text_sync_button">Pulsame para descargar la lista desde Dropbox</string>
 -->
     <string name="app_name">TagBox</string>
     <string name="aboutto">About to &#8230;</string>
@@ -16,5 +18,6 @@
     <string name="route_title">Select path</string>
     <string name="route_text">Route shared with Dropbox</string>
     <string name="aboutto_text">Easy to control purchases and synchronized application with dropbox.\n\nThis program has been developed by @p4coperez.</string>
-    
+    <string name="text_archive_button">Click me to save list</string>
+    <string name="text_sync_button">Click me to download list from Dropbox</string>
 </resources>
