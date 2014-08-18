@@ -1,29 +1,10 @@
 package com.p4coperez.tagbox;
 
-/*
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import android.os.Environment;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
-*/
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import android.app.ListActivity;
 import android.content.Intent;
@@ -35,12 +16,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,80 +37,63 @@ public class MainActivity extends ListActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		//setListAdapter(null);
-		//setListAdapter(new IconAdapter()); 
 		
 		Intent p = new Intent(this, Configuration.class);
 		p.putExtra("itemSelected",false);
 		startActivityForResult(p,STATIC_INTEGER_VALUE_CONFIG_ACTUAL);
 		
 		listApps = (ListView) findViewById(android.R.id.list);
+		ArrayList<Elemento> arrayelements = new ArrayList<Elemento>();
+		Elemento elemento;
 
-		//ListView of Elements
+		//ListView path of Elements
 		tvPath = (TextView) findViewById(R.id.textViewRouteConfig);
 		File tarjeta = Environment.getExternalStorageDirectory();
 		//File dir = new File(tarjeta.getAbsolutePath()+tvPath.getText().toString());
 		File dir = new File(tarjeta.getAbsolutePath());
 		File[] filelist = dir.listFiles();
 		
-		// Count number of files to read
-		String[] itemsFileNames = new String[filelist.length];
-		int countList = 0;
-		for (int j = 0; j < filelist.length; j++) {
+		StringBuilder text;
+		
+		for (int i = 0; i < filelist.length; i++) {
 			//Get the text file
-			File file = new File(tarjeta.getAbsolutePath(),filelist[j].toString());
+			File file = new File(tarjeta.getAbsolutePath(),filelist[i].toString());
+			
+			//Code for testing   ListView - Adapter Element getView()
+			if (!file.isHidden()) {
+			elemento = new Elemento(getResources().getDrawable(R.drawable.ic_launcher),filelist[i].toString(), "5",false);
+	        arrayelements.add(elemento);
+			}
 			
 			if (file.isFile() && !file.isHidden()) {
-				countList = countList +1;
-				itemsFileNames[j]=filelist[j].toString();
+				//Read text from file
+				text = new StringBuilder();
+
+				try {
+				    BufferedReader br = new BufferedReader(new FileReader(file));
+				    String line;
+
+				    while ((line = br.readLine()) != null) {
+				        text.append(line);
+				        text.append('\n');
+				    }
+				    
+				    //Get element to show on AdapterElements
+			        elemento = new Elemento(getResources().getDrawable(R.drawable.ic_launcher),filelist[i].toString(), text.toString(),false);
+			        arrayelements.add(elemento);
+				 
+				}
+				catch (IOException e) {
+				    //You'll need to add proper error handling here
+				}
 				
 			}
 
 		}
 		
-		// Get files to show
-		String[] itemsElementsNames = new String[countList];
-		String[] itemsElementsTexts = new String[countList];
-		boolean[] itemsElementsChecked = new boolean[countList];
 		
-		StringBuilder text;
-		
-		for (int i = 0; i < itemsElementsNames.length; i++) {
-			
-			
-			//Get the text file
-			File file = new File(tarjeta.getAbsolutePath(),itemsElementsNames[i].toString());
-
-			if (file.isFile() && !file.isHidden()) {
-			//Read text from file
-			text = new StringBuilder();
-
-			try {
-			    BufferedReader br = new BufferedReader(new FileReader(file));
-			    String line;
-
-			    while ((line = br.readLine()) != null) {
-			        text.append(line);
-			        text.append('\n');
-			    }
-			    
-			    //Get name file
-				itemsElementsNames[i] = filelist[i].getName();
-	   			// Get text from file txt
-	   			itemsElementsTexts[i] = text.toString();
-	   			// default false
-	   			itemsElementsChecked[i] = false;
-			 
-			}
-			catch (IOException e) {
-			    //You'll need to add proper error handling here
-			}
-		   }
-
-		}
-
-		Listadapter Adapter = new Listadapter(this,itemsElementsNames, itemsElementsTexts, itemsElementsChecked);
-		listApps.setAdapter(Adapter);
+		AdapterElements adapter = new AdapterElements(this, arrayelements);
+		listApps.setAdapter(adapter);
 		
 		//listApps.setOnItemClickListener((OnItemClickListener) this);
 
