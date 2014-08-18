@@ -67,9 +67,9 @@ public class Listadapter extends BaseAdapter{
    holder = new ViewHolder();
  
    holder.apkName = (TextView) convertView
-     .findViewById(R.id.elementBox1);
+     .findViewById(R.id.elementBox);
    holder.ck1 = (CheckBox) convertView
-     .findViewById(R.id.checkBox1);
+     .findViewById(R.id.checkBox);
  
    convertView.setTag(holder);
  

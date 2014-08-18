@@ -81,14 +81,17 @@ public class MainActivity extends ListActivity {
 		int countList = 0;
 		for (int j = 0; j < filelist.length; j++) {
 			//Get the text file
-			File file = new File(tarjeta.getAbsolutePath(),itemsFileNames.toString());
-
+			File file = new File(tarjeta.getAbsolutePath(),filelist[j].toString());
+			
 			if (file.isFile() && !file.isHidden()) {
 				countList = countList +1;
+				itemsFileNames[j]=filelist[j].toString();
+				
 			}
+
 		}
 		
-		
+		// Get files to show
 		String[] itemsElementsNames = new String[countList];
 		String[] itemsElementsTexts = new String[countList];
 		boolean[] itemsElementsChecked = new boolean[countList];
@@ -195,14 +198,14 @@ public class MainActivity extends ListActivity {
 			tvPath = (TextView) findViewById(R.id.textViewRouteConfig);
 			tvPath.setText(data.getStringExtra("path")); 
 			// only for testing path route : to delete
-			tv2 = (TextView) findViewById(R.id.textView2);
+			tv2 = (TextView) findViewById(R.id.textViewCache);
 			tv2.setText(data.getStringExtra("path"));
 		}
 	}
 
 	
 	public void sync(View v) {
-		tv2 = (TextView) findViewById(R.id.textView2);
+		tv2 = (TextView) findViewById(R.id.textViewCache);
 		tv2.setText("sync: "+((TextView) findViewById(R.id.textViewRouteConfig)).getText().toString());
 		
 		/*
@@ -235,7 +238,7 @@ public class MainActivity extends ListActivity {
 	}
 	
 	public void archive(View v) {
-		tv2 = (TextView) findViewById(R.id.textView2);
+		tv2 = (TextView) findViewById(R.id.textViewCache);
 		tv2.setText("archive: "+((TextView) findViewById(R.id.textViewRouteConfig)).getText().toString());
 		/*
 		tv1 = (TextView) findViewById(R.id.textView1);
