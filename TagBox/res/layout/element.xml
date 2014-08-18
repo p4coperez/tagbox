@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="match_parent" 
-    android:layout_height="match_parent"> 
+	android:layout_width="wrap_content"
+    android:layout_height="wrap_content"> 
     
     <ImageView
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/elementBox"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
         android:contentDescription="@string/icon_element_description"
+        android:textSize="@dimen/activity_horizontal_margin"
         android:src="@drawable/ic_launcher" />
 
     <CheckBox
         android:id="@+id/checkBox"
         android:layout_width="25dp"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/elementBox"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="24dp"
+        android:gravity="center"
         android:textSize="@dimen/activity_horizontal_margin" />
 
     <TextView
@@ -31,7 +30,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginRight="21dp"
         android:layout_toLeftOf="@+id/checkBox"
-        android:gravity="right"
+        android:gravity="center|right"
         android:text="4"
         android:textSize="@dimen/activity_horizontal_margin" />
 
@@ -39,10 +38,11 @@
         android:id="@+id/elementBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/elementContent"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/elementContent"
         android:layout_toRightOf="@+id/icon"
-        android:gravity="left"
+        android:gravity="center|left"
         android:text="platanos"
         android:textSize="@dimen/activity_horizontal_margin" />
         

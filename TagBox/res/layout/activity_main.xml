@@ -6,23 +6,6 @@
     android:orientation="vertical"
     tools:context=".MainActivity" >
 
-     <LinearLayout
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content" >
-    
-	    <TextView
-	        android:id="@+id/textViewRouteConfig"
-	        android:layout_width="319dp"
-	        android:layout_height="wrap_content"
-	        android:visibility="invisible" />
-	
-	    <TextView
-	        android:id="@+id/textViewCache"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" />
-
-	</LinearLayout>
-
     <TableLayout
          android:layout_width="match_parent"
          android:layout_height="wrap_content" >
@@ -35,41 +18,65 @@
              
 			    <Button
 			        android:id="@+id/buttonArchive"
-			        android:layout_width="51dp"
+			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
 			        android:layout_gravity="center_horizontal"
-			        android:layout_marginLeft="10dp"
-			        android:layout_marginTop="10dp"
+			        android:layout_marginLeft="15dp"
+			        android:layout_marginTop="15dp"
 			        android:background="@drawable/button_archive_effect"
 			        android:contentDescription="@string/text_archive_button" />
 			    
+			    
 			     <Button
 			        android:id="@+id/buttonSync"
-			        android:layout_width="51dp"
+			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
 			        android:layout_gravity="center_horizontal"
-			        android:layout_marginLeft="10dp"
-			        android:layout_marginTop="10dp"
+			        android:layout_marginLeft="15dp"
+			        android:layout_marginTop="15dp"
 			        android:background="@drawable/button_sync_effect"
 			        android:contentDescription="@string/text_sync_button" />
 
-             
          </TableRow>
      
     </TableLayout>
 
 	<LinearLayout
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	 >
+            
+	       	<TextView
+			    android:id="@+id/textViewCache"
+			    android:layout_width="wrap_content"
+			    android:layout_height="wrap_content"
+			    android:gravity="right"
+			    android:visibility="visible" />
+	       	
+	</LinearLayout>
+		
+	<LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
-    
 	        <ListView
 	            android:id="@android:id/list"
 	            android:layout_width="wrap_content"
-	            android:layout_height="1034dp" 
-	            tools:listitem="@layout/element">
+	            android:layout_height="wrap_content"
+	            tools:listitem="@layout/element" >
 
 	    </ListView>
     
+	</LinearLayout>
+	
+		<LinearLayout
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	 >
+			<TextView
+			        android:id="@+id/textViewRouteConfig"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:visibility="invisible" />
 	</LinearLayout>
 
 </LinearLayout>
