@@ -74,15 +74,15 @@ public class MainActivity extends ListActivity {
 		
 		for (int i = 0; i < filelist.length; i++) {
 			//Get the text file
-			File file = new File(tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString(),filelist[i].toString());
+			File file = new File(filelist[i].toString());
 			
 			//Code for testing   ListView - Adapter Element getView()
-			if (!file.isHidden() & !file.isFile() ) {
+			if (!file.isHidden() & file.isDirectory() ) {
 			elemento = new Elemento(getResources().getDrawable(R.drawable.ic_launcher),file.getName(), "dir",false);
 	        arrayelements.add(elemento);
 			}
 			
-			if (file.isFile() & !file.isHidden()) {
+			if (!file.isHidden() & file.isFile() & file.canWrite()) {
 				//Read text from file
 				text = new StringBuilder();
 
@@ -173,7 +173,7 @@ public class MainActivity extends ListActivity {
 			tvPath = (TextView) findViewById(R.id.textViewRouteConfig);
 			// Get path update
 			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-			refresh.putExtra("path",preferences.getString("route", "sdcard"));
+			refresh.putExtra("path",preferences.getString("route", STATIC_STRING_VALUE_CONFIG_TAGBOX));
 		    startActivity(refresh);
 		    this.finish();
 		}

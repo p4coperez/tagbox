@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.widget.TextView;
 
 public class Configuration extends PreferenceActivity {
+	private static final String STATIC_STRING_VALUE_CONFIG_TAGBOX = "tagbox";
 	TextView textviewPath;
 
 	/** Called when the activity is first created */
@@ -49,7 +50,7 @@ public class Configuration extends PreferenceActivity {
 */					if (extras.getBoolean("itemSelected")){
 						//pref.setSummary(sharedPreferences.getString("route", "sdcard"));
 	 					Intent p = new Intent();
-	 					p.putExtra("path", sharedPreferences.getString("route", "sdcard"));
+	 					p.putExtra("path", sharedPreferences.getString("route", STATIC_STRING_VALUE_CONFIG_TAGBOX));
 	 					setResult(RESULT_OK,p);
 	 					finish();
 					}
@@ -66,13 +67,13 @@ public class Configuration extends PreferenceActivity {
     
         	if (extras.getBoolean("itemSelected")== false){
         		
-        		p.putExtra("path", preferences.getString("route", "sdcard"));
+        		p.putExtra("path", preferences.getString("route", STATIC_STRING_VALUE_CONFIG_TAGBOX));
             	setResult(RESULT_OK,p);
             	//pref.setSummary(preferences.getString("route", "sdcard"));
             	finish();
         	}
         	else {
-        		p.putExtra("path", preferences.getString("route", "sdcard"));
+        		p.putExtra("path", preferences.getString("route", STATIC_STRING_VALUE_CONFIG_TAGBOX));
             	//pref.setSummary(preferences.getString("route", "sdcard"));
             	setResult(RESULT_OK,p);
             	preferences.registerOnSharedPreferenceChangeListener(listener); //To avoid GC issues

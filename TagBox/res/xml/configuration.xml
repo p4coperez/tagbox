@@ -6,7 +6,7 @@
     android:key="@string/route"
     android:title="@string/route_title"
     android:summary="@string/route_text"
-    android:defaultValue="/sdcard/" 
+    android:defaultValue="tagbox" 
     />
 
 </PreferenceScreen>
