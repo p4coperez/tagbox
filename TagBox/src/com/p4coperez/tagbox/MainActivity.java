@@ -77,12 +77,12 @@ public class MainActivity extends ListActivity {
 			File file = new File(tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString(),filelist[i].toString());
 			
 			//Code for testing   ListView - Adapter Element getView()
-			if (!file.isHidden()) {
-			elemento = new Elemento(getResources().getDrawable(R.drawable.ic_launcher),filelist[i].toString(), "5",false);
+			if (!file.isHidden() & !file.isFile() ) {
+			elemento = new Elemento(getResources().getDrawable(R.drawable.ic_launcher),file.getName(), "dir",false);
 	        arrayelements.add(elemento);
 			}
 			
-			if (file.isFile() && !file.isHidden()) {
+			if (file.isFile() & !file.isHidden()) {
 				//Read text from file
 				text = new StringBuilder();
 
@@ -96,7 +96,7 @@ public class MainActivity extends ListActivity {
 				    }
 				    
 				    //Get element to show on AdapterElements
-			        elemento = new Elemento(getResources().getDrawable(R.drawable.ic_launcher),filelist[i].toString(), text.toString(),false);
+			        elemento = new Elemento(getResources().getDrawable(R.drawable.ic_launcher),file.getName(), text.toString(),false);
 			        arrayelements.add(elemento);
 				 
 				}
@@ -114,6 +114,7 @@ public class MainActivity extends ListActivity {
 		listApps.setAdapter(adapter);
 		
 		//listApps.setOnItemClickListener((OnItemClickListener) this);
+
 
 	}
 
