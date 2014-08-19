@@ -4,8 +4,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,19 +16,25 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 
+import android.util.SparseBooleanArray;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import android.widget.AbsListView.MultiChoiceModeListener;
 
-public class MainActivity extends ListActivity {
+public class MainActivity extends Activity {
 	private static final int STATIC_INTEGER_VALUE_CONFIG_UPDATE = 4357;
 	private static final int STATIC_INTEGER_VALUE_CONFIG_ACTUAL = 0000;
 	private static final String STATIC_STRING_VALUE_CONFIG_TAGBOX = "tagbox";
@@ -34,6 +43,7 @@ public class MainActivity extends ListActivity {
 	TextView tv2;
 	ArrayList <String> checkedValue;
 	ListView listApps;
+	AdapterElements listviewadapter;
 	
 	
 	@Override
@@ -45,10 +55,8 @@ public class MainActivity extends ListActivity {
 		p.putExtra("itemSelected",false);
 		startActivityForResult(p,STATIC_INTEGER_VALUE_CONFIG_ACTUAL);
 		
-
-		
 		listApps = (ListView) findViewById(android.R.id.list);
-		ArrayList<Elemento> arrayelements = new ArrayList<Elemento>();
+		List<Elemento> listelements = new ArrayList<Elemento>();
 		Elemento elemento;
 
 		//ListView path of Elements
@@ -79,10 +87,11 @@ public class MainActivity extends ListActivity {
 			//Code for testing   ListView - Adapter Element getView()
 			if (!file.isHidden() & file.isDirectory() ) {
 			elemento = new Elemento(getResources().getDrawable(R.drawable.ic_launcher),file.getName(), "dir",false);
-	        arrayelements.add(elemento);
+	        listelements.add(elemento);
 			}
 			
-			if (!file.isHidden() & file.isFile() & file.canWrite()) {
+			//Elements to show
+			if (!file.isHidden() & !file.isDirectory() ) {
 				//Read text from file
 				text = new StringBuilder();
 
@@ -97,7 +106,7 @@ public class MainActivity extends ListActivity {
 				    
 				    //Get element to show on AdapterElements
 			        elemento = new Elemento(getResources().getDrawable(R.drawable.ic_launcher),file.getName(), text.toString(),false);
-			        arrayelements.add(elemento);
+			        listelements.add(elemento);
 				 
 				}
 				catch (IOException e) {
@@ -110,11 +119,80 @@ public class MainActivity extends ListActivity {
 		
 		} // end if filelist != null
 		
-		AdapterElements adapter = new AdapterElements(this, arrayelements);
-		listApps.setAdapter(adapter);
+		//AdapterElements adapter = new AdapterElements(this, arrayelements);
+		listviewadapter = new AdapterElements(this,R.layout.element, listelements);
+		listApps.setAdapter(listviewadapter);
+		listApps.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 		
-		//listApps.setOnItemClickListener((OnItemClickListener) this);
+		
+		listApps.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {
 
+			Elemento selItem = (Elemento) listApps.getSelectedItem(); //
+			String value= selItem.getName(); //getter method
+			Toast.makeText(MainActivity.this, "Check Clicked :"+value , Toast.LENGTH_SHORT).show();
+			
+
+			}
+		});
+		
+		// Capture ListView item click
+        listApps.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+ 
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode,
+                    int position, long id, boolean checked) {
+                // Capture total checked items
+                final int checkedCount = listApps.getCheckedItemCount();
+                // Set the CAB title according to total checked items
+                mode.setTitle(checkedCount + " Selected");
+                // Calls toggleSelection method from AdapterElements Class
+                listviewadapter.toggleSelection(position);
+            }
+ 
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                switch (item.getItemId()) {
+                case R.id.delete:
+                    // Calls getSelectedIds method from AdapterElements Class
+                    SparseBooleanArray selected = listviewadapter
+                            .getSelectedIds();
+                    // Captures all selected ids with a loop
+                    for (int i = (selected.size() - 1); i >= 0; i--) {
+                        if (selected.valueAt(i)) {
+                            Elemento selecteditem = listviewadapter
+                                    .getItem(selected.keyAt(i));
+                            // Remove selected items following the ids
+                            listviewadapter.remove(selecteditem);
+                        }
+                    }
+                    // Close CAB
+                    mode.finish();
+                    return true;
+                default:
+                    return false;
+                }
+            }
+ 
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                mode.getMenuInflater().inflate(R.menu.activity_main, menu);
+                return true;
+            }
+ 
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                // TODO Auto-generated method stub
+                listviewadapter.removeSelection();
+            }
+ 
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                // TODO Auto-generated method stub
+                return false;
+            }
+        });
 
 	}
 
@@ -190,7 +268,7 @@ public class MainActivity extends ListActivity {
 	public void sync(View v) {
 		tv2 = (TextView) findViewById(R.id.textViewCache);
 		tv2.setText("sync: "+((TextView) findViewById(R.id.textViewRouteConfig)).getText().toString());
-		
+				
 		/*
 		tv1 = (TextView) findViewById(R.id.textView1);
 		iv1 = (ImageView) findViewById(R.id.imageButtonSync);
@@ -223,6 +301,7 @@ public class MainActivity extends ListActivity {
 	public void archive(View v) {
 		tv2 = (TextView) findViewById(R.id.textViewCache);
 		tv2.setText("archive: "+((TextView) findViewById(R.id.textViewRouteConfig)).getText().toString());
+				
 		/*
 		tv1 = (TextView) findViewById(R.id.textView1);
 		iv1 = (ImageView) findViewById(R.id.imageButtonArchive);

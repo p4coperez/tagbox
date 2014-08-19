@@ -23,8 +23,6 @@ public class Configuration extends PreferenceActivity {
 			
 
 	 	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
-
 	 	
 	 	OnSharedPreferenceChangeListener listener = new OnSharedPreferenceChangeListener() {
 	 		
