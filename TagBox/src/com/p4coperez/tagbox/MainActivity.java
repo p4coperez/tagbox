@@ -8,8 +8,10 @@ import java.util.ArrayList;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +28,7 @@ import android.widget.Toast;
 public class MainActivity extends ListActivity {
 	private static final int STATIC_INTEGER_VALUE_CONFIG_UPDATE = 4357;
 	private static final int STATIC_INTEGER_VALUE_CONFIG_ACTUAL = 0000;
+	private static final String STATIC_STRING_VALUE_CONFIG_TAGBOX = "tagbox";
 
 	TextView tvPath;
 	TextView tv2;
@@ -42,6 +45,8 @@ public class MainActivity extends ListActivity {
 		p.putExtra("itemSelected",false);
 		startActivityForResult(p,STATIC_INTEGER_VALUE_CONFIG_ACTUAL);
 		
+
+		
 		listApps = (ListView) findViewById(android.R.id.list);
 		ArrayList<Elemento> arrayelements = new ArrayList<Elemento>();
 		Elemento elemento;
@@ -49,15 +54,27 @@ public class MainActivity extends ListActivity {
 		//ListView path of Elements
 		tvPath = (TextView) findViewById(R.id.textViewRouteConfig);
 		File tarjeta = Environment.getExternalStorageDirectory();
-		//File dir = new File(tarjeta.getAbsolutePath()+tvPath.getText().toString());
-		File dir = new File(tarjeta.getAbsolutePath());
+		File dir = new File("");
+		
+		//Get path from extras 
+		tvPath.setText(STATIC_STRING_VALUE_CONFIG_TAGBOX);
+		
+		Bundle extras = getIntent().getExtras();
+		
+		if (extras != null){
+			tvPath.setText(extras.getString("path"));
+		}
+		
+		dir = new File(tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString());
+
 		File[] filelist = dir.listFiles();
 		
+		if (filelist != null) {
 		StringBuilder text;
 		
 		for (int i = 0; i < filelist.length; i++) {
 			//Get the text file
-			File file = new File(tarjeta.getAbsolutePath(),filelist[i].toString());
+			File file = new File(tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString(),filelist[i].toString());
 			
 			//Code for testing   ListView - Adapter Element getView()
 			if (!file.isHidden()) {
@@ -91,6 +108,7 @@ public class MainActivity extends ListActivity {
 
 		}
 		
+		} // end if filelist != null
 		
 		AdapterElements adapter = new AdapterElements(this, arrayelements);
 		listApps.setAdapter(adapter);
@@ -149,8 +167,12 @@ public class MainActivity extends ListActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 		
-		if (requestCode==STATIC_INTEGER_VALUE_CONFIG_UPDATE && resultCode== RESULT_OK ){
+		if (requestCode==STATIC_INTEGER_VALUE_CONFIG_UPDATE && resultCode== RESULT_OK ){ 
 			Intent refresh = new Intent(this, MainActivity.class);
+			tvPath = (TextView) findViewById(R.id.textViewRouteConfig);
+			// Get path update
+			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+			refresh.putExtra("path",preferences.getString("route", "sdcard"));
 		    startActivity(refresh);
 		    this.finish();
 		}
