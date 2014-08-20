@@ -22,7 +22,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:layout_marginRight="24dp"
-		android:editable="false"
 		android:enabled="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
@@ -38,7 +37,6 @@
         android:layout_marginRight="21dp"
         android:layout_toLeftOf="@+id/checkBox"
         android:gravity="center|right"
-        android:text="4"
         android:textSize="@dimen/activity_horizontal_margin" />
 
     <TextView
@@ -50,7 +48,6 @@
         android:layout_toLeftOf="@+id/elementContent"
         android:layout_toRightOf="@+id/icon"
         android:gravity="center|left"
-        android:text="platanos"
         android:textSize="@dimen/activity_horizontal_margin" />
         
 </RelativeLayout>

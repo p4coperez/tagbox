@@ -14,21 +14,23 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" ><activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name"
+            android:screenOrientation="sensorPortait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity 
             android:label="@string/aboutto" 
-            android:name="AboutTo" android:theme="@android:style/Theme.Dialog">
+            android:name="AboutTo" android:theme="@android:style/Theme.Dialog"
+            android:screenOrientation="sensorPortait">
           
         </activity>
         <activity
             android:label="@string/config"
-            android:name="Configuration" android:theme="@android:style/Theme.Dialog"> 
+            android:name="Configuration" android:theme="@android:style/Theme.Dialog"
+            android:screenOrientation="sensorPortait"> 
         </activity>
     </application>
 

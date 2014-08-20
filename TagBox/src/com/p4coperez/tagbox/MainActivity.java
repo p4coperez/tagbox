@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ public class MainActivity extends Activity {
 	private static final int STATIC_INTEGER_VALUE_CONFIG_UPDATE = 4357;
 	private static final int STATIC_INTEGER_VALUE_CONFIG_ACTUAL = 0000;
 	private static final String STATIC_STRING_VALUE_CONFIG_TAGBOX = "tagbox";
+	private static final String STATIC_STRING_APP_DROPSYNC = "com.ttxapps.dropsync";
 
 	TextView tvPath;
 	TextView tv2;
@@ -101,7 +103,8 @@ public class MainActivity extends Activity {
 				    }
 				    
 				    //Get element to show on AdapterElements
-			        elemento = new Elemento(getResources().getDrawable(R.drawable.ic_launcher),file.getName(), text.toString(),false);
+				    elemento = new Elemento(getResources().getDrawable(R.drawable.ic_launcher),file.getName(), text.toString(),false);
+			        //elemento = new Elemento(getResources().getDrawable(R.drawable.ic_launcher),file.getName(), text.substring(6).toString(),new Boolean (text.substring(0, 5).toString()));
 			        listelements.add(elemento);
 				 
 				}
@@ -136,7 +139,14 @@ public class MainActivity extends Activity {
                 listviewadapter.toggleSelection(position);
                 // Set checked
                 listviewadapter.getElemento().get(position).setChecked(checked);
-                
+                if (checked){
+                	
+                }
+                else{
+                	
+                }
+
+
             }
  
             @Override
@@ -157,6 +167,7 @@ public class MainActivity extends Activity {
                     }
                     // Close CAB
                     mode.finish();
+                    updateview();
                     return true;
                 default:
                     return false;
@@ -166,20 +177,34 @@ public class MainActivity extends Activity {
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                 mode.getMenuInflater().inflate(R.menu.activity_archive, menu);
-                
-        		
+       		
                 return true;
             }
  
             @Override
             public void onDestroyActionMode(ActionMode mode) {
-                // TODO Auto-generated method stub
+            	// Calls getSelectedIds method from AdapterElements Class
+                SparseBooleanArray selected = listviewadapter
+                        .getSelectedIds();
+                // Captures all selected ids with a loop
+                for (int i = (selected.size() - 1); i >= 0; i--) {
+                    if (selected.valueAt(i)) {
+                        Elemento selecteditem = listviewadapter
+                                .getItem(selected.keyAt(i));
+                        // Remove selected items following the ids
+                     // Set checked
+                        selecteditem.setChecked(false);
+                    }
+                }
+                
                 listviewadapter.removeSelection();
+                // all file set checked to false
             }
  
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
                 // TODO Auto-generated method stub
+            	listviewadapter.removeSelection();
                 return false;
             }
         });
@@ -260,12 +285,30 @@ public class MainActivity extends Activity {
 		
 	}
 	
+	protected void launchApp(String packageName) {
+		Intent mIntent = getPackageManager().getLaunchIntentForPackage(
+				packageName);
+		if (mIntent != null) {
+			try {
+				super.startActivity(mIntent);
+					
+			} catch (ActivityNotFoundException err) {
+				Toast.makeText(MainActivity.this,R.string.app_not_found, Toast.LENGTH_SHORT).show();
+			}
+		}
+		else{
+			Toast.makeText(MainActivity.this,R.string.app_not_found, Toast.LENGTH_SHORT).show();
+
+		}
+
+	}
 	public void sync(View v, Menu menu) {
 		
 		String synctext= getString(R.string.sync);
 		Toast.makeText(MainActivity.this, synctext.toString() , Toast.LENGTH_SHORT).show();
+
+		launchApp(STATIC_STRING_APP_DROPSYNC);
 		
-		updateview();
 		
 		
 		//tv2 = (TextView) findViewById(R.id.textViewCache);
@@ -312,9 +355,10 @@ public class MainActivity extends Activity {
                         .getItem(selected.keyAt(i));
                 // Remove selected items following the ids
                 listviewadapter.remove(selecteditem);
+                // Delete Files
             }
         }
-        
+
 		//tv2 = (TextView) findViewById(R.id.textViewCache);
 		//tv2.setText("archive: "+((TextView) findViewById(R.id.textViewRouteConfig)).getText().toString());
 		
