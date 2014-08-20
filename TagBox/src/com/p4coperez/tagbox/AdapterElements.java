@@ -1,6 +1,5 @@
 package com.p4coperez.tagbox;
  
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -10,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,7 +16,6 @@ import android.widget.TextView;
 public class AdapterElements extends ArrayAdapter<Elemento> {
  
     protected Activity activity;
-    protected ArrayList<Elemento> items;
     
     Context context;
     LayoutInflater inflater;
@@ -40,40 +37,15 @@ public static class ViewHolder {
     public CheckBox checked;
 }
 
- /*
-public AdapterElements(Activity activity, ArrayList<Elemento> items) {
-        this.activity = activity;
-        this.items = items;
-}
- 
-    @Override
-    public int getCount() {
-        return items.size();
-    }
- 
-    @Override
-    public Elemento getItem(int arg0) {
-        return items.get(arg0);
-    }
- 
-    @Override
-    public long getItemId(int position) {
-        return items.get(position).getId();
-    }
- */
 
  @Override
  public View getView(int position, View convertView, ViewGroup parent) {
-     // Objeto ViewHolder
-     ViewHolder viewholder;
+     // ViewHolder
+     final ViewHolder viewholder;
 
-     // Generamos una convertView por motivos de eficiencia
      View v = convertView;
-
-     //Asociamos el layout de la lista que hemos creado e incrustamos el ViewHolder
      if(convertView == null){
-         //LayoutInflater inf = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-         v = inflater.inflate(R.layout.element, null);
+          v = inflater.inflate(R.layout.element, null);
          viewholder = new ViewHolder();
          viewholder.name = (TextView) v.findViewById(R.id.elementBox);
          viewholder.icon = (ImageView) v.findViewById(R.id.icon);
@@ -84,17 +56,12 @@ public AdapterElements(Activity activity, ArrayList<Elemento> items) {
          viewholder = (ViewHolder) v.getTag();
      }
 
-     // Creamos un objeto directivo
-     // Elemento elem = items.get(position);
-
-     //Rellenamos la información utilizando el ViewHolder
-     viewholder = (ViewHolder) v.getTag();
+     //viewholder = (ViewHolder) v.getTag();
      viewholder.name.setText(itemslist.get(position).getName());
      viewholder.content.setText(itemslist.get(position).getContent());
      viewholder.icon.setImageDrawable(itemslist.get(position).getIcon());
      viewholder.checked.setChecked (itemslist.get(position).getChecked());
-
-     // Retornamos la vista
+     
      return v;
  }
  

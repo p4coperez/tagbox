@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -24,9 +23,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -123,19 +119,7 @@ public class MainActivity extends Activity {
 		listviewadapter = new AdapterElements(this,R.layout.element, listelements);
 		listApps.setAdapter(listviewadapter);
 		listApps.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-		
-		
-		listApps.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> adapter, View v, int position, long id) {
-
-			Elemento selItem = (Elemento) listApps.getSelectedItem(); //
-			String value= selItem.getName(); //getter method
-			Toast.makeText(MainActivity.this, "Check Clicked :"+value , Toast.LENGTH_SHORT).show();
-			
-
-			}
-		});
+				
 		
 		// Capture ListView item click
         listApps.setMultiChoiceModeListener(new MultiChoiceModeListener() {
@@ -146,15 +130,19 @@ public class MainActivity extends Activity {
                 // Capture total checked items
                 final int checkedCount = listApps.getCheckedItemCount();
                 // Set the CAB title according to total checked items
-                mode.setTitle(checkedCount + " Selected");
+                String selecttext= getString(R.string.select);
+                mode.setTitle(checkedCount + " " +selecttext);
                 // Calls toggleSelection method from AdapterElements Class
                 listviewadapter.toggleSelection(position);
+                // Set checked
+                listviewadapter.getElemento().get(position).setChecked(checked);
+                
             }
  
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 switch (item.getItemId()) {
-                case R.id.delete:
+                case R.id.archive:
                     // Calls getSelectedIds method from AdapterElements Class
                     SparseBooleanArray selected = listviewadapter
                             .getSelectedIds();
@@ -177,7 +165,9 @@ public class MainActivity extends Activity {
  
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                mode.getMenuInflater().inflate(R.menu.activity_main, menu);
+                mode.getMenuInflater().inflate(R.menu.activity_archive, menu);
+                
+        		
                 return true;
             }
  
@@ -197,30 +187,31 @@ public class MainActivity extends Activity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onCreateOptionsMenu(final Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		// Menu Configuration and About To
+		// Menu Button Sync, Archive, Configuration and About To
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
 		
-		// Buttons Sync and Archive
+		// Buttons Sync
 		Button buttonSync = (Button) findViewById(R.id.buttonSync);
-		Button buttonArchive = (Button) findViewById(R.id.buttonArchive);
 		
 		buttonSync.setOnClickListener (new OnClickListener() {
 			public void onClick(View view) {
-				Toast.makeText(MainActivity.this, "Button Clicked", Toast.LENGTH_SHORT).show();
-				sync(view);
+				//Toast.makeText(MainActivity.this, "Button Sync Clicked", Toast.LENGTH_SHORT).show();
+				sync(view,menu);
 			}
 		});
 		
+		//Button Archive
+        Button buttonArchive = (Button) findViewById(R.id.buttonArchive);
+        
 		buttonArchive.setOnClickListener (new OnClickListener() {
 			public void onClick(View view) {
-				Toast.makeText(MainActivity.this, "Button Clicked", Toast.LENGTH_SHORT).show();
-				archive(view);
+				//Toast.makeText(MainActivity.this, "Button Archive Clicked", Toast.LENGTH_SHORT).show();
+				archive(view,menu);
 			}
 		});
-		
 		return true;
 	}
 	 
@@ -247,13 +238,7 @@ public class MainActivity extends Activity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 		
 		if (requestCode==STATIC_INTEGER_VALUE_CONFIG_UPDATE && resultCode== RESULT_OK ){ 
-			Intent refresh = new Intent(this, MainActivity.class);
-			tvPath = (TextView) findViewById(R.id.textViewRouteConfig);
-			// Get path update
-			SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-			refresh.putExtra("path",preferences.getString("route", STATIC_STRING_VALUE_CONFIG_TAGBOX));
-		    startActivity(refresh);
-		    this.finish();
+			updateview();
 		}
 		if (requestCode==STATIC_INTEGER_VALUE_CONFIG_ACTUAL && resultCode== RESULT_OK && data.getStringExtra("path")!="" ){
 			tvPath = (TextView) findViewById(R.id.textViewRouteConfig);
@@ -264,10 +249,27 @@ public class MainActivity extends Activity {
 		}
 	}
 
+	public void updateview (){
+		Intent refresh = new Intent(this, MainActivity.class);
+		tvPath = (TextView) findViewById(R.id.textViewRouteConfig);
+		// Get path update
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		refresh.putExtra("path",preferences.getString("route", STATIC_STRING_VALUE_CONFIG_TAGBOX));
+	    startActivity(refresh);
+	    this.finish();
+		
+	}
 	
-	public void sync(View v) {
-		tv2 = (TextView) findViewById(R.id.textViewCache);
-		tv2.setText("sync: "+((TextView) findViewById(R.id.textViewRouteConfig)).getText().toString());
+	public void sync(View v, Menu menu) {
+		
+		String synctext= getString(R.string.sync);
+		Toast.makeText(MainActivity.this, synctext.toString() , Toast.LENGTH_SHORT).show();
+		
+		updateview();
+		
+		
+		//tv2 = (TextView) findViewById(R.id.textViewCache);
+		//tv2.setText("sync: "+((TextView) findViewById(R.id.textViewRouteConfig)).getText().toString());
 				
 		/*
 		tv1 = (TextView) findViewById(R.id.textView1);
@@ -298,10 +300,31 @@ public class MainActivity extends Activity {
 		*/
 	}
 	
-	public void archive(View v) {
-		tv2 = (TextView) findViewById(R.id.textViewCache);
-		tv2.setText("archive: "+((TextView) findViewById(R.id.textViewRouteConfig)).getText().toString());
-				
+	public void archive(View v, Menu menu) {
+		
+		// Calls getSelectedIds method from AdapterElements Class
+        SparseBooleanArray selected = listviewadapter
+                .getSelectedIds();
+        // Captures all selected ids with a loop
+        for (int i = (selected.size() - 1); i >= 0; i--) {
+            if (selected.valueAt(i)) {
+                Elemento selecteditem = listviewadapter
+                        .getItem(selected.keyAt(i));
+                // Remove selected items following the ids
+                listviewadapter.remove(selecteditem);
+            }
+        }
+        
+		//tv2 = (TextView) findViewById(R.id.textViewCache);
+		//tv2.setText("archive: "+((TextView) findViewById(R.id.textViewRouteConfig)).getText().toString());
+		
+        String archivetext= getString(R.string.archive);
+		Toast.makeText(MainActivity.this, archivetext.toString() , Toast.LENGTH_SHORT).show();
+
+		updateview();
+		
+        
+        
 		/*
 		tv1 = (TextView) findViewById(R.id.textView1);
 		iv1 = (ImageView) findViewById(R.id.imageButtonArchive);
@@ -324,6 +347,8 @@ public class MainActivity extends Activity {
 		} catch (IOException e) {
 		}
 		*/
+		
+
 	}
 
 }

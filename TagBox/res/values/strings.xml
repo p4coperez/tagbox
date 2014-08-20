@@ -12,7 +12,9 @@
     <string name="text_archive_button">Pulsame para guardar la lista</string>
     <string name="text_sync_button">Pulsame para descargar la lista desde Dropbox</string>
     <string name="icon_element_description">TagBox</string>
-    <string name="delete">Eliminado</string>
+    <string name="archive">Archivado</string>
+    <string name="sync">Sincronizado</string>
+    <string name="select">Seleccionados</string>
     
 -->
     <string name="app_name">TagBox</string>
@@ -24,6 +26,8 @@
     <string name="text_archive_button">Click me to save list</string>
     <string name="text_sync_button">Click me to download list from Dropbox</string>
     <string name="icon_element_description">TagBox</string>
-    <string name="delete">Delete</string>
+    <string name="archive">Archived</string>
+    <string name="sync">Synchronized</string>
+    <string name="select">Selected</string>
     
 </resources>
