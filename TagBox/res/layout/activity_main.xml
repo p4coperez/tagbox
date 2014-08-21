@@ -4,19 +4,21 @@
     android:layout_height="match_parent"
     android:gravity="end"
     android:orientation="vertical"
-    tools:context=".MainActivity" >
+    tools:context=".MainActivity"
+    tools:ignore="UselessParent"  >
 
     <TableLayout
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
-         android:visibility="visible"  >
+         android:visibility="visible">
 
          <TableRow
              android:id="@+id/tableRow1"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:gravity="center" 
-             android:visibility="visible" >
+             android:visibility="visible"
+             style="?android:attr/buttonBarStyle">
              
 				<Button
 			        android:id="@+id/buttonArchive"
@@ -25,6 +27,7 @@
 			        android:layout_gravity="center_horizontal"
 			        android:layout_marginLeft="15dp"
 			        android:layout_marginTop="15dp"
+			        style="?android:attr/buttonBarButtonStyle"
 			        android:background="@drawable/button_archive_effect"
 			        android:contentDescription="@string/text_archive_button" />
 			    
@@ -36,6 +39,7 @@
 			        android:layout_gravity="center_horizontal"
 			        android:layout_marginLeft="15dp"
 			        android:layout_marginTop="15dp"
+			        style="?android:attr/buttonBarButtonStyle"
 			        android:background="@drawable/button_sync_effect"
 			        android:contentDescription="@string/text_sync_button" />
 

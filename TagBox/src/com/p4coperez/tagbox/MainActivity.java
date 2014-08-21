@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,6 +26,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -84,7 +86,7 @@ public class MainActivity extends Activity {
 			
 			//Code for testing   ListView - Adapter Element getView()
 			if (!file.isHidden() & file.isDirectory() ) {
-			elemento = new Elemento(getResources().getDrawable(R.drawable.ic_launcher),file.getName(), "dir",false);
+			elemento = new Elemento(getResources().getDrawable(R.drawable.ic_pencil),file.getName(), "dir",false);
 	        listelements.add(elemento);
 			}
 			
@@ -103,7 +105,7 @@ public class MainActivity extends Activity {
 				    }
 				    
 				    //Get element to show on AdapterElements
-				    elemento = new Elemento(getResources().getDrawable(R.drawable.ic_launcher),file.getName(), text.toString(),false);
+				    elemento = new Elemento(getResources().getDrawable(R.drawable.ic_pencil),file.getName(), text.toString(),false);
 			        //elemento = new Elemento(getResources().getDrawable(R.drawable.ic_launcher),file.getName(), text.substring(6).toString(),new Boolean (text.substring(0, 5).toString()));
 			        listelements.add(elemento);
 				 
@@ -204,7 +206,7 @@ public class MainActivity extends Activity {
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
                 // TODO Auto-generated method stub
-            	listviewadapter.removeSelection();
+            	//listviewadapter.removeSelection();
                 return false;
             }
         });
@@ -244,6 +246,32 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onOptionsItemSelected (MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.new_item:
+			// custom dialog
+			final Dialog dialog = new Dialog(this);
+			dialog.setContentView(R.layout.new_item);
+			String new_itemtext= getString(R.string.new_item);
+			dialog.setTitle(new_itemtext);
+			 
+			// set the custom dialog components - text, image and button
+			/*EditText textitemname = (EditText) dialog.findViewById(R.id.editTextItemName);
+			textitemname.getText().clear();
+		
+			EditText textitemcontent = (EditText) dialog.findViewById(R.id.editTextItemContent);				
+			textitemcontent.getText().clear(); 
+			*/
+			Button dialogButton = (Button) dialog.findViewById(R.id.buttonItemButton);
+						// if button is clicked, close the custom dialog
+						dialogButton.setOnClickListener(new OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								dialog.dismiss();
+							}
+						});
+			 
+			 dialog.show();
+			break;
+			
 		case R.id.config:
 			Intent p = new Intent(this, Configuration.class);
 			p.putExtra("itemSelected",true);
@@ -254,6 +282,7 @@ public class MainActivity extends Activity {
 			Intent i = new Intent(this, AboutTo.class);
 			startActivity(i);
 			break;
+			
 		}
 		
 		return true;

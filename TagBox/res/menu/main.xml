@@ -1,12 +1,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.p4coperez.tagbox.MainActivity" >
-
+    <item
+        android:id="@+id/new_item"
+        android:title="@string/new_item"/>
     <item
         android:id="@+id/config"
         android:title="@string/config"/>
     <item
         android:id="@+id/aboutto"
         android:title="@string/aboutto"/>
-
 </menu>
