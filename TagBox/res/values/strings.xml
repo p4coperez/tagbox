@@ -16,11 +16,13 @@
     <string name="icon_element_description">TagBox</string>
     <string name="archive">Actualizar</string>
     <string name="sync">Sincronizar</string>
-    <string name="select">Seleccionados</string>
+    <string name="selected">Seleccionados</string>
     <string name="app_not_found">Dropsync: Aplicacion no encontrada</string>
     <string name="itemname_title">Elemento</string>
     <string name="itemcontent_title">Cantidad</string>
     <string name="new_item">Nuevo Elemento</string>
+    <string name="erroradditem">"Error añadiendo elemento:"</string>
+    <string name="errordeleteitem">"Error borrando elemento:"</string>
 -->
     <string name="app_name">TagBox</string>
     <string name="aboutto">About to &#8230;</string>
@@ -33,10 +35,12 @@
     <string name="icon_element_description">TagBox</string>
     <string name="archive">Updated</string>
     <string name="sync">Synchronize</string>
-    <string name="select">Selected</string>
+    <string name="selected">Selected</string>
     <string name="app_not_found">Dropsync: App not found</string>
     <string name="itemname_title">Item</string>
     <string name="itemcontent_title">Count</string>
     <string name="new_item">New item</string>
+    <string name="erroradditem">"Error adding item:"</string>
+    <string name="errordeleteitem">"Error deleting item:"</string>
     
 </resources>

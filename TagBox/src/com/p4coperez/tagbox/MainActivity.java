@@ -2,8 +2,10 @@ package com.p4coperez.tagbox;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -135,19 +137,12 @@ public class MainActivity extends Activity {
                 // Capture total checked items
                 final int checkedCount = listApps.getCheckedItemCount();
                 // Set the CAB title according to total checked items
-                String selecttext= getString(R.string.select);
+                String selecttext= getString(R.string.selected);
                 mode.setTitle(checkedCount + " " +selecttext);
                 // Calls toggleSelection method from AdapterElements Class
                 listviewadapter.toggleSelection(position);
                 // Set checked
                 listviewadapter.getElemento().get(position).setChecked(checked);
-                if (checked){
-                	
-                }
-                else{
-                	
-                }
-
 
             }
  
@@ -220,7 +215,7 @@ public class MainActivity extends Activity {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main, menu);
 		
-		// Buttons Sync
+		// Button Sync
 		Button buttonSync = (Button) findViewById(R.id.buttonSync);
 		
 		buttonSync.setOnClickListener (new OnClickListener() {
@@ -252,20 +247,23 @@ public class MainActivity extends Activity {
 			dialog.setContentView(R.layout.new_item);
 			String new_itemtext= getString(R.string.new_item);
 			dialog.setTitle(new_itemtext);
-			 
-			// set the custom dialog components - text, image and button
-			/*EditText textitemname = (EditText) dialog.findViewById(R.id.editTextItemName);
-			textitemname.getText().clear();
-		
-			EditText textitemcontent = (EditText) dialog.findViewById(R.id.editTextItemContent);				
-			textitemcontent.getText().clear(); 
-			*/
+			
 			Button dialogButton = (Button) dialog.findViewById(R.id.buttonItemButton);
 						// if button is clicked, close the custom dialog
 						dialogButton.setOnClickListener(new OnClickListener() {
 							@Override
 							public void onClick(View v) {
+								// get the custom dialog components - texts
+								EditText textitemname = (EditText) dialog.findViewById(R.id.editTextItemName);							
+								EditText textitemcontent = (EditText) dialog.findViewById(R.id.editTextItemContent);				
+																
+								if (add_item(textitemname.getText().toString(),textitemcontent.getText().toString())){
+									updateview();
+								}
+								
 								dialog.dismiss();
+								
+								
 							}
 						});
 			 
@@ -298,8 +296,8 @@ public class MainActivity extends Activity {
 			tvPath = (TextView) findViewById(R.id.textViewRouteConfig);
 			tvPath.setText(data.getStringExtra("path")); 
 			// only for testing path route : to delete
-			tv2 = (TextView) findViewById(R.id.textViewCache);
-			tv2.setText(data.getStringExtra("path"));
+			//tv2 = (TextView) findViewById(R.id.textViewCache);
+			//tv2.setText(data.getStringExtra("path"));
 		}
 	}
 
@@ -315,6 +313,7 @@ public class MainActivity extends Activity {
 	}
 	
 	protected void launchApp(String packageName) {
+		String app_not_foundtext= getString(R.string.app_not_found);
 		Intent mIntent = getPackageManager().getLaunchIntentForPackage(
 				packageName);
 		if (mIntent != null) {
@@ -322,15 +321,17 @@ public class MainActivity extends Activity {
 				super.startActivity(mIntent);
 					
 			} catch (ActivityNotFoundException err) {
-				Toast.makeText(MainActivity.this,R.string.app_not_found, Toast.LENGTH_SHORT).show();
+				
+				Toast.makeText(MainActivity.this,app_not_foundtext, Toast.LENGTH_SHORT).show();
 			}
 		}
 		else{
-			Toast.makeText(MainActivity.this,R.string.app_not_found, Toast.LENGTH_SHORT).show();
+			Toast.makeText(MainActivity.this,app_not_foundtext, Toast.LENGTH_SHORT).show();
 
 		}
 
 	}
+	
 	public void sync(View v, Menu menu) {
 		
 		String synctext= getString(R.string.sync);
@@ -338,42 +339,14 @@ public class MainActivity extends Activity {
 
 		launchApp(STATIC_STRING_APP_DROPSYNC);
 		
-		
-		
+		// only for testing path route : to delete
 		//tv2 = (TextView) findViewById(R.id.textViewCache);
 		//tv2.setText("sync: "+((TextView) findViewById(R.id.textViewRouteConfig)).getText().toString());
-				
-		/*
-		tv1 = (TextView) findViewById(R.id.textView1);
-		iv1 = (ImageView) findViewById(R.id.imageButtonSync);
-		String filename = tv1.getText().toString();;
-		try {
-			File tarjeta = Environment.getExternalStorageDirectory();
-			File file = new File(tarjeta.getAbsolutePath(), filename);
-
-				// Restore file from Dropbox path on tv1
-				FileInputStream fIn = new FileInputStream(file);
-				InputStreamReader archivo = new InputStreamReader(fIn);
-				BufferedReader br = new BufferedReader(archivo);
-				String linea = br.readLine();
-				String todo = "";
-				while (linea != null) {
-					todo = todo + linea + "\n";
-					linea = br.readLine();
-				}
-				br.close();
-				archivo.close();
-				//iv1.setImageResource(R.id.imageButtonSync);
-				
-				// todo : show in listview
-				
-		} catch (IOException e) {
-		}
-		*/
+			
 	}
 	
 	public void archive(View v, Menu menu) {
-		
+		String archivetext= getString(R.string.archive);
 		// Calls getSelectedIds method from AdapterElements Class
         SparseBooleanArray selected = listviewadapter
                 .getSelectedIds();
@@ -385,43 +358,60 @@ public class MainActivity extends Activity {
                 // Remove selected items following the ids
                 listviewadapter.remove(selecteditem);
                 // Delete Files
+                if (delete_item(selecteditem.getName())){
+                	
+            		Toast.makeText(MainActivity.this, archivetext , Toast.LENGTH_SHORT).show();
+                }
             }
         }
 
+        if (selected.size()==0){
+        	Toast.makeText(MainActivity.this, archivetext , Toast.LENGTH_SHORT).show();
+        }
+        // only for testing path route : to delete
 		//tv2 = (TextView) findViewById(R.id.textViewCache);
 		//tv2.setText("archive: "+((TextView) findViewById(R.id.textViewRouteConfig)).getText().toString());
 		
-        String archivetext= getString(R.string.archive);
-		Toast.makeText(MainActivity.this, archivetext.toString() , Toast.LENGTH_SHORT).show();
+        updateview();
+		
 
-		updateview();
-		
-        
-        
-		/*
-		tv1 = (TextView) findViewById(R.id.textView1);
-		iv1 = (ImageView) findViewById(R.id.imageButtonArchive);
-		
-		String filename = tv1.getText().toString();
-		String contenido = "contenido";
-		
+	}
+	
+	protected boolean delete_item (String filename){
+		File tarjeta = Environment.getExternalStorageDirectory();
+		File tagfile = new File(tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString()+"/"+filename);
+
+		boolean deleted = tagfile.delete();
+		if (deleted){
+			//Toast.makeText(this, "File deleted: " + tagfile.getName(),Toast.LENGTH_SHORT).show();
+		}
+		else{
+			String errordeleteitemtext= getString(R.string.errordeleteitem);
+			Toast.makeText(this, errordeleteitemtext+ " "+ tagfile.getName(),Toast.LENGTH_SHORT).show();
+		}
+		return deleted;
+	}
+	
+	protected boolean add_item (String filename,String contenido){
+		File tarjeta = Environment.getExternalStorageDirectory();
+		File tagfile = new File(tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString()+"/"+filename);
+		boolean added = false;
 		try {
-			File tarjeta = Environment.getExternalStorageDirectory();
-			File file = new File(tarjeta.getAbsolutePath(), filename);
+			
 			OutputStreamWriter osw = new OutputStreamWriter(
-					new FileOutputStream(file));
+					new FileOutputStream(tagfile));
 			osw.write(contenido);
 			osw.flush();
 			osw.close();
-			Toast.makeText(this, "Los datos fueron grabados correctamente",
-					Toast.LENGTH_SHORT).show();
+			added = true;
+			//Toast.makeText(this, "File added: "+ tagfile.getName(),Toast.LENGTH_SHORT).show();
 			
 			//iv1.setImageResource(R.id.imageButtonArchive);
 		} catch (IOException e) {
+			String erroradditemtext= getString(R.string.erroradditem);
+			Toast.makeText(this, erroradditemtext + " " + tagfile.getName(),Toast.LENGTH_SHORT).show();
 		}
-		*/
-		
-
+		return added;
 	}
 
 }
