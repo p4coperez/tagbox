@@ -10,7 +10,7 @@
     <string name="config">Configuración</string>
     <string name="route_title">Seleccionar ruta del directorio</string>
     <string name="route_text">Ruta compartida con Dropsync desde \'/sdcard/\'</string>
-    <string name="aboutto_text">Fácil control de las compras y aplicación sincronizada con dropbox.\n\nEste programa ha sido desarrollado por @p4coperez.</string>
+    <string name="aboutto_text">Facil de control de una lista de elementos y la aplicación sincronizada con Dropsync (Dropbox).\n\nEste programa ha sido desarrollado por @p4coperez.</string>
     <string name="text_archive_button">Pulsame para guardar la lista</string>
     <string name="text_sync_button">Pulsame para descargar la lista desde Dropbox</string>
     <string name="icon_element_description">TagBox</string>
@@ -18,16 +18,16 @@
     <string name="sync">Sincronizar</string>
     <string name="select">Seleccionados</string>
     <string name="app_not_found">Dropsync: Aplicacion no encontrada</string>
-    <string name="itemname_title">Articulo</string>
+    <string name="itemname_title">Elemento</string>
     <string name="itemcontent_title">Cantidad</string>
-    <string name="new_item">Nuevo Articulo</string>
+    <string name="new_item">Nuevo Elemento</string>
 -->
     <string name="app_name">TagBox</string>
     <string name="aboutto">About to &#8230;</string>
     <string name="config">Configuration</string>
     <string name="route_title">Select directory path</string>
     <string name="route_text">Dir shared with Dropsync from \'/sdcard/\'</string>
-    <string name="aboutto_text">Easy to control purchases and synchronized application with dropbox.\n\nThis program has been developed by @p4coperez.</string>
+    <string name="aboutto_text">easy to control a item list and synchronized application with dropsync (Dropbox).\n\nThis program has been developed by @p4coperez.</string>
     <string name="text_archive_button">Click me to save list</string>
     <string name="text_sync_button">Click me to download list from Dropbox</string>
     <string name="icon_element_description">TagBox</string>
