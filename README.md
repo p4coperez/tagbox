@@ -1,4 +1,4 @@
 tagbox
 ============
 
-easy to control purchases and synchronized application with dropbox
+easy to control a item list and synchronized application with dropsync (Dropbox)
