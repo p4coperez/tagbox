@@ -3,7 +3,7 @@
 	android:layout_width="wrap_content"
     android:layout_height="wrap_content"
      android:descendantFocusability="blocksDescendants"
-     ?android:attr/activatedBackgroundIndicator > 
+     android:background="?android:attr/activatedBackgroundIndicator" > 
     
     <ImageView
         android:id="@+id/icon"

@@ -21,8 +21,10 @@
     <string name="itemname_title">Elemento</string>
     <string name="itemcontent_title">Cantidad</string>
     <string name="new_item">Nuevo Elemento</string>
-    <string name="erroradditem">"Error añadiendo elemento:"</string>
-    <string name="errordeleteitem">"Error borrando elemento:"</string>
+    <string name="erroradditem">Error añadiendo elemento:</string>
+    <string name="errordeleteitem">Error borrando elemento:</string>
+    <string name="new_group">Nuevo Grupo</string>
+    <string name="groupname_title">Grupo</string>
 -->
     <string name="app_name">TagBox</string>
     <string name="aboutto">About to &#8230;</string>
@@ -40,10 +42,10 @@
     <string name="itemname_title">Item</string>
     <string name="itemcontent_title">Count</string>
     <string name="new_item">New item</string>
-    <string name="erroradditem">"Error adding item:"</string>
-    <string name="errordeleteitem">"Error deleting item:"</string>
-    <string name="routegroup_title">Seleccionar la lista por defecto</string>
-    <string name="routegroup_text">Se mostraran los elementos de la lista indicada</string>
+    <string name="erroradditem">Error adding item:</string>
+    <string name="errordeleteitem">Error deleting item:</string>
+    <string name="new_group">New Group</string>
+    <string name="groupname_title">Group</string>
     
     
 </resources>
