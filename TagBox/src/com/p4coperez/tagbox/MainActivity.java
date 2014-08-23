@@ -41,6 +41,7 @@ public class MainActivity extends Activity {
 	private static final int STATIC_INTEGER_VALUE_CONFIG_UPDATE = 4357;
 	private static final int STATIC_INTEGER_VALUE_CONFIG_ACTUAL = 0000;
 	private static final String STATIC_STRING_VALUE_CONFIG_TAGBOX = "tagbox";
+	private static final String STATIC_STRING_VALUE_CONFIG_TAGBOX_GROUP = "/";
 	private static final String STATIC_STRING_APP_DROPSYNC = "com.ttxapps.dropsync";
 
 	TextView tvPath;
@@ -56,9 +57,6 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		Intent p = new Intent(this, Configuration.class);
-		p.putExtra("itemSelected",false);
-		startActivityForResult(p,STATIC_INTEGER_VALUE_CONFIG_ACTUAL);
 		
 		listApps = (ListView) findViewById(android.R.id.list);
 		List<Elemento> listelements = new ArrayList<Elemento>();
@@ -71,22 +69,58 @@ public class MainActivity extends Activity {
 		File dir = new File("");
 		
 		//Get path from extras 
-		tvPath.setText(STATIC_STRING_VALUE_CONFIG_TAGBOX);
+		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());		
+		tvPath.setText(preferences.getString("route", STATIC_STRING_VALUE_CONFIG_TAGBOX));		
+		tvPathGroup.setText(STATIC_STRING_VALUE_CONFIG_TAGBOX_GROUP);
 		
+		final TabHost tabs=(TabHost)findViewById(R.id.tabhost);
+	    
+	    tabs.setup();
 		
 		Bundle extras = getIntent().getExtras();
-		
 		if (extras != null){
 			tvPath.setText(extras.getString("path"));
 			tvPathGroup.setText(extras.getString("pathgroup"));
 		}
 		
+		Intent p = new Intent(this, Configuration.class);
+		p.putExtra("itemSelected",false);
+		p.putExtra("pathgroup",tvPathGroup.getText().toString());
+		startActivityForResult(p,STATIC_INTEGER_VALUE_CONFIG_ACTUAL);
+		
+		
+		dir = new File(tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString());
+
+		File[] dirgroup = dir.listFiles();
+		
+		if (dirgroup != null) {
+		
+		for (int i = 0; i < dirgroup.length; i++) {
+			//Get the text file
+			File dirgroupitem = new File(dirgroup[i].toString());
+			
+			//Code for Group of Elements
+			if (!dirgroupitem.isHidden() & dirgroupitem.isDirectory() ) {
+				// create new tabs of directories
+		        TabHost.TabSpec spec=tabs.newTabSpec(dirgroupitem.getName());
+		        
+		       spec.setContent(new TabHost.TabContentFactory() {
+		          public View createTabContent(String tag) {
+		            return(listApps);
+		          }
+		        });
+		        spec.setIndicator(dirgroupitem.getName());
+		        tabs.addTab(spec);
+
+			}
+		
+		}
+		}
+		
 		//-----------------------------------------------------------------------
-		final TabHost tabs=(TabHost)findViewById(R.id.tabhost);
+
 	    
-	    tabs.setup();
-	    
-	    if (!tvPathGroup.equals(tabs.getCurrentTabTag())){
+	    if (!tvPathGroup.equals(tabs.getCurrentTabTag()) || tvPathGroup != null){
 	    	tabs.setCurrentTabByTag(tvPathGroup.getText().toString());
 	    }
 	    
@@ -94,16 +128,11 @@ public class MainActivity extends Activity {
 
 	    	@Override
 	    	public void onTabChanged(String tabId) {
-
-	    	int i = tabs.getCurrentTab();
-	    	Toast.makeText(MainActivity.this, "Tab Clicked: "+i, Toast.LENGTH_SHORT).show();
-			
-	    	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-	        preferences.edit().putString("routegroup", "Music");
-	        
-	 
-	        Toast.makeText(MainActivity.this, "Tab Clicked: "+tabs.getCurrentTabTag() + "valor:"+tvPathGroup.getText().toString(), Toast.LENGTH_SHORT).show();
+	    	// Code testing group items on click
+	    	//int i = tabs.getCurrentTab();
+	    	//Toast.makeText(MainActivity.this, "Tab Clicked: "+i+" - tabsCurrent: "+tabs.getCurrentTabTag() + "-> tvPathGroup: "+tvPathGroup.getText().toString(), Toast.LENGTH_SHORT).show();
 	        tvPathGroup.setText(tabs.getCurrentTabTag());
+	        updateview(tvPathGroup.getText().toString());
 	    	}
 	    });
 	
@@ -118,22 +147,6 @@ public class MainActivity extends Activity {
 		for (int i = 0; i < filelist.length; i++) {
 			//Get the text file
 			File file = new File(filelist[i].toString());
-			
-			//Code for testing   ListView - Adapter Element getView()
-			if (!file.isHidden() & file.isDirectory() ) {
-				// create new tabs of directories
-		        TabHost.TabSpec spec=tabs.newTabSpec(file.getName());
-		        
-		       spec.setContent(new TabHost.TabContentFactory() {
-		          public View createTabContent(String tag) {
-		            return(listApps);
-		          }
-		        });
-		        spec.setIndicator(file.getName());
-		        tabs.addTab(spec);
-			//elemento = new Elemento(getResources().getDrawable(R.drawable.ic_pencil),file.getName(), "dir",false);
-	        //listelements.add(elemento);
-			}
 			
 			//Elements to show
 			if (!file.isHidden() & !file.isDirectory() ) {
@@ -249,22 +262,13 @@ public class MainActivity extends Activity {
             }
         });
 
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(final Menu menu) {
-		super.onCreateOptionsMenu(menu);
-		// Menu Button Sync, Archive, Configuration and About To
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.main, menu);
-		
 		// Button Sync
 		Button buttonSync = (Button) findViewById(R.id.buttonSync);
 		
 		buttonSync.setOnClickListener (new OnClickListener() {
 			public void onClick(View view) {
 				//Toast.makeText(MainActivity.this, "Button Sync Clicked", Toast.LENGTH_SHORT).show();
-				sync(view,menu);
+				sync(view);
 			}
 		});
 		
@@ -274,10 +278,19 @@ public class MainActivity extends Activity {
 		buttonArchive.setOnClickListener (new OnClickListener() {
 			public void onClick(View view) {
 				//Toast.makeText(MainActivity.this, "Button Archive Clicked", Toast.LENGTH_SHORT).show();
-				archive(view,menu);
+				
+				archive(view,tvPathGroup.getText().toString());
 			}
 		});
-		
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(final Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		// Menu Button Sync, Archive, Configuration and About To
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.main, menu);
+	
 		
 		return true;
 	}
@@ -318,6 +331,7 @@ public class MainActivity extends Activity {
 		case R.id.config:
 			Intent p = new Intent(this, Configuration.class);
 			p.putExtra("itemSelected",true);
+			p.putExtra("pathgroup",tvPathGroup.getText().toString());
 			startActivityForResult(p,STATIC_INTEGER_VALUE_CONFIG_UPDATE);
 			break;
 		
@@ -333,13 +347,12 @@ public class MainActivity extends Activity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
-		tvPathGroup = (TextView) findViewById(R.id.textViewDirConfig);
-		tvPathGroup.setText(data.getStringExtra("pathgroup")); 
+ 
 		if (requestCode==STATIC_INTEGER_VALUE_CONFIG_UPDATE && resultCode== RESULT_OK ){ 
 			
 			updateview(data.getStringExtra("pathgroup"));
 		}
-		if (requestCode==STATIC_INTEGER_VALUE_CONFIG_ACTUAL && resultCode== RESULT_OK && data.getStringExtra("path")!="" ){
+		if (requestCode==STATIC_INTEGER_VALUE_CONFIG_ACTUAL && resultCode== RESULT_OK && data.getStringExtra("path")!="" && data.getStringExtra("pathgroup")!=""  ){
 			tvPath = (TextView) findViewById(R.id.textViewRouteConfig);
 			tvPath.setText(data.getStringExtra("path"));
 			tvPathGroup = (TextView) findViewById(R.id.textViewDirConfig);
@@ -352,8 +365,7 @@ public class MainActivity extends Activity {
 
 	public void updateview (String tvPathGroup){
 		Intent refresh = new Intent(this, MainActivity.class);
-		tvPath = (TextView) findViewById(R.id.textViewRouteConfig);
-		//tvPathGroup = (TextView) findViewById(R.id.textViewDirConfig);
+
 		// Get path update
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		refresh.putExtra("path",preferences.getString("route", STATIC_STRING_VALUE_CONFIG_TAGBOX));
@@ -383,7 +395,7 @@ public class MainActivity extends Activity {
 
 	}
 	
-	public void sync(View v, Menu menu) {
+	public void sync(View v) {
 		
 		String synctext= getString(R.string.sync);
 		Toast.makeText(MainActivity.this, synctext.toString() , Toast.LENGTH_SHORT).show();
@@ -396,7 +408,7 @@ public class MainActivity extends Activity {
 			
 	}
 	
-	public void archive(View v, Menu menu) {
+	public void archive(View v, String tvPathGroup) {
 		String archivetext= getString(R.string.archive);
 		// Calls getSelectedIds method from AdapterElements Class
         SparseBooleanArray selected = listviewadapter
@@ -423,7 +435,7 @@ public class MainActivity extends Activity {
 		//tv2 = (TextView) findViewById(R.id.textViewCache);
 		//tv2.setText("archive: "+((TextView) findViewById(R.id.textViewRouteConfig)).getText().toString());
 		
-        updateview(tvPathGroup.getText().toString());
+        updateview(tvPathGroup);
 		
 
 	}

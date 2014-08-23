@@ -66,13 +66,15 @@ public class Configuration extends PreferenceActivity {
         	if (extras.getBoolean("itemSelected")== false){
         		
         		p.putExtra("path", preferences.getString("route", STATIC_STRING_VALUE_CONFIG_TAGBOX));
-            	setResult(RESULT_OK,p);
+        		p.putExtra("pathgroup",extras.getString("pathgroup"));
+        		setResult(RESULT_OK,p);
             	//pref.setSummary(preferences.getString("route", "sdcard"));
             	finish();
         	}
         	else {
         		p.putExtra("path", preferences.getString("route", STATIC_STRING_VALUE_CONFIG_TAGBOX));
-            	//pref.setSummary(preferences.getString("route", "sdcard"));
+        		p.putExtra("pathgroup",extras.getString("pathgroup"));
+        		//pref.setSummary(preferences.getString("route", "sdcard"));
             	setResult(RESULT_OK,p);
             	preferences.registerOnSharedPreferenceChangeListener(listener); //To avoid GC issues
         		
