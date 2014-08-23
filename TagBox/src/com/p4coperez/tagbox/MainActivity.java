@@ -319,7 +319,7 @@ public class MainActivity extends Activity {
 								EditText textitemname = (EditText) dialog.findViewById(R.id.editTextItemName);							
 								EditText textitemcontent = (EditText) dialog.findViewById(R.id.editTextItemContent);				
 																
-								if (add_item(textitemname.getText().toString(),textitemcontent.getText().toString())){
+								if (add_item(textitemname.getText().toString(),textitemcontent.getText().toString(),tvPathGroup.getText().toString())){
 									updateview(tvPathGroup.getText().toString());
 								}
 								
@@ -330,6 +330,35 @@ public class MainActivity extends Activity {
 						});
 			 
 			 dialog.show();
+			break;
+			
+		case R.id.new_group:
+			// custom dialog
+			final Dialog dialoggroup = new Dialog(this);
+			dialoggroup.setContentView(R.layout.new_group);
+			String new_grouptext= getString(R.string.new_group);
+			dialoggroup.setTitle(new_grouptext);
+			
+			Button dialogButtonGroup = (Button) dialoggroup.findViewById(R.id.buttonGroupButton);
+						// if button is clicked, close the custom dialog
+						dialogButtonGroup.setOnClickListener(new OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								// get the custom dialog components - texts
+								EditText textgroupname = (EditText) dialoggroup.findViewById(R.id.editTextGroupName);							
+												
+																
+								if (add_group(textgroupname.getText().toString(),tvPathGroup.getText().toString())){
+									updateview(tvPathGroup.getText().toString());
+								}
+								
+								dialoggroup.dismiss();
+								
+								
+							}
+						});
+			 
+			 dialoggroup.show();
 			break;
 			
 		case R.id.config:
@@ -425,7 +454,7 @@ public class MainActivity extends Activity {
                 // Remove selected items following the ids
                 listviewadapter.remove(selecteditem);
                 // Delete Files
-                if (delete_item(selecteditem.getName())){
+                if (delete_item(selecteditem.getName(),tvPathGroup)){
                 	
             		Toast.makeText(MainActivity.this, archivetext , Toast.LENGTH_SHORT).show();
                 }
@@ -444,9 +473,9 @@ public class MainActivity extends Activity {
 
 	}
 	
-	protected boolean delete_item (String filename){
+	protected boolean delete_item (String filename, String tvPathGroup){
 		File tarjeta = Environment.getExternalStorageDirectory();
-		File tagfile = new File(tarjeta.getAbsolutePath()+"/"+tvPathGroup.getText().toString()+"/"+tvPath.getText().toString()+"/"+filename);
+		File tagfile = new File(tarjeta.getAbsolutePath()+"/"+tvPathGroup+"/"+tvPath.getText().toString()+"/"+filename);
 
 		boolean deleted = tagfile.delete();
 		if (deleted){
@@ -459,9 +488,9 @@ public class MainActivity extends Activity {
 		return deleted;
 	}
 	
-	protected boolean add_item (String filename,String contenido){
+	protected boolean add_item (String filename,String contenido,String tvPathGroup ){
 		File tarjeta = Environment.getExternalStorageDirectory();
-		File tagfile = new File(tarjeta.getAbsolutePath()+"/"+tvPathGroup.getText().toString()+"/"+tvPath.getText().toString()+"/"+filename);
+		File tagfile = new File(tarjeta.getAbsolutePath()+"/"+tvPathGroup+"/"+tvPath.getText().toString()+"/"+filename);
 		boolean added = false;
 		try {
 			
@@ -471,13 +500,37 @@ public class MainActivity extends Activity {
 			osw.flush();
 			osw.close();
 			added = true;
-			//Toast.makeText(this, "File added: "+ tagfile.getName(),Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "File added: "+ tagfile.getName()+"  --- ruta:" +tarjeta.getAbsolutePath()+"/"+tvPathGroup+"/",Toast.LENGTH_SHORT).show();
 			
 			//iv1.setImageResource(R.id.imageButtonArchive);
 		} catch (IOException e) {
 			String erroradditemtext= getString(R.string.erroradditem);
-			Toast.makeText(this, erroradditemtext + " " + tagfile.getName(),Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, erroradditemtext + " " + tagfile.getName()+"  --- ruta:" +tarjeta.getAbsolutePath()+"/"+tvPathGroup+"/",Toast.LENGTH_SHORT).show();
 		}
+		return added;
+	}
+
+	protected boolean add_group (String filedir, String tvPathGroup ){
+		File tarjeta = Environment.getExternalStorageDirectory();
+		File dirfile = new File(tarjeta.getAbsolutePath()+"/"+tvPathGroup+"/"+tvPath.getText().toString()+"/"+filedir);
+		boolean added = false;
+		//try {
+		if (!dirfile.exists()) {
+	        if (!dirfile.mkdirs()) {
+	        	String erroraddgrouptext= getString(R.string.erroradditem);
+	    		Toast.makeText(this, erroraddgrouptext + " " + dirfile.getName()+"  --- ruta:" +tarjeta.getAbsolutePath()+"/"+tvPathGroup+"/",Toast.LENGTH_SHORT).show();	
+	        }
+	        else{
+	        	Toast.makeText(this, "Dir added: "+ dirfile.getName()+"  --- ruta:" +tarjeta.getAbsolutePath()+"/"+tvPathGroup+"/",Toast.LENGTH_SHORT).show();
+				
+	        }
+		}
+	        	
+			//iv1.setImageResource(R.id.imageButtonArchive);
+		//} catch (IOException e) {
+		//	String erroraddgrouptext= getString(R.string.erroradditem);
+		//	Toast.makeText(this, erroraddgrouptext + " " + tagfile.getName()+"  --- ruta:" +tarjeta.getAbsolutePath()+"/"+tvPathGroup+"/",Toast.LENGTH_SHORT).show();
+		//}
 		return added;
 	}
 
