@@ -1,51 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:orientation="vertical"
+  android:gravity="end"
+  android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="end"
-    android:orientation="vertical"
     tools:context=".MainActivity"
-    tools:ignore="UselessParent"  >
+    tools:ignore="UselessParent" >
+
 
     <TableLayout
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:visibility="visible">
-
-         <TableRow
-             android:id="@+id/tableRow1"
-             android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
-             android:gravity="center" 
-             android:visibility="visible"
-             style="?android:attr/buttonBarStyle">
-             
-				<Button
-			        android:id="@+id/buttonArchive"
+     <TabHost android:id="@+id/tabhost"
+    	android:layout_width="fill_parent"
+    	android:layout_height="fill_parent">
+    
+      <TabWidget android:id="@android:id/tabs"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"
+      />
+    <FrameLayout
+        android:id="@android:id/tabcontent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+        <TextView
+			        android:id="@+id/textViewDirConfig"
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
-			        android:layout_gravity="center_horizontal"
-			        android:layout_marginLeft="15dp"
-			        android:layout_marginTop="15dp"
-			        style="?android:attr/buttonBarButtonStyle"
-			        android:background="@drawable/button_archive_effect"
-			        android:contentDescription="@string/text_archive_button" />
-			    
-			    
-			     <Button
-			        android:id="@+id/buttonSync"
-			        android:layout_width="wrap_content"
-			        android:layout_height="wrap_content"
-			        android:layout_gravity="center_horizontal"
-			        android:layout_marginLeft="15dp"
-			        android:layout_marginTop="15dp"
-			        style="?android:attr/buttonBarButtonStyle"
-			        android:background="@drawable/button_sync_effect"
-			        android:contentDescription="@string/text_sync_button" />
+			        android:visibility="invisible" />
 
-         </TableRow>
-     
-    </TableLayout>
+  </FrameLayout>
+  </TabHost>
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            style="?android:attr/buttonBarStyle"
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:visibility="visible" >
+
+            <Button
+                android:id="@+id/buttonArchive"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/button_archive_effect"
+                android:contentDescription="@string/text_archive_button" />
+
+            <Button
+                android:id="@+id/buttonSync"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/button_sync_effect"
+                android:contentDescription="@string/text_sync_button" />
+            </TableRow>
+     </TableLayout>
 
 
 		
@@ -90,4 +110,6 @@
 			        android:visibility="invisible" />
 		</LinearLayout>
 
-</LinearLayout>
+   
+
+ </LinearLayout>   

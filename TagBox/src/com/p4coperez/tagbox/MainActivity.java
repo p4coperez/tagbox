@@ -30,8 +30,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.TabHost;
 
 import android.widget.AbsListView.MultiChoiceModeListener;
 
@@ -42,6 +44,7 @@ public class MainActivity extends Activity {
 	private static final String STATIC_STRING_APP_DROPSYNC = "com.ttxapps.dropsync";
 
 	TextView tvPath;
+	TextView tvPathGroup;
 	TextView tv2;
 	ArrayList <String> checkedValue;
 	ListView listApps;
@@ -63,19 +66,49 @@ public class MainActivity extends Activity {
 
 		//ListView path of Elements
 		tvPath = (TextView) findViewById(R.id.textViewRouteConfig);
+		tvPathGroup = (TextView) findViewById(R.id.textViewDirConfig);
 		File tarjeta = Environment.getExternalStorageDirectory();
 		File dir = new File("");
 		
 		//Get path from extras 
 		tvPath.setText(STATIC_STRING_VALUE_CONFIG_TAGBOX);
 		
+		
 		Bundle extras = getIntent().getExtras();
 		
 		if (extras != null){
 			tvPath.setText(extras.getString("path"));
+			tvPathGroup.setText(extras.getString("pathgroup"));
 		}
 		
-		dir = new File(tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString());
+		//-----------------------------------------------------------------------
+		final TabHost tabs=(TabHost)findViewById(R.id.tabhost);
+	    
+	    tabs.setup();
+	    
+	    if (!tvPathGroup.equals(tabs.getCurrentTabTag())){
+	    	tabs.setCurrentTabByTag(tvPathGroup.getText().toString());
+	    }
+	    
+	    tabs.setOnTabChangedListener(new OnTabChangeListener() {
+
+	    	@Override
+	    	public void onTabChanged(String tabId) {
+
+	    	int i = tabs.getCurrentTab();
+	    	Toast.makeText(MainActivity.this, "Tab Clicked: "+i, Toast.LENGTH_SHORT).show();
+			
+	    	SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+	        preferences.edit().putString("routegroup", "Music");
+	        
+	 
+	        Toast.makeText(MainActivity.this, "Tab Clicked: "+tabs.getCurrentTabTag() + "valor:"+tvPathGroup.getText().toString(), Toast.LENGTH_SHORT).show();
+	        tvPathGroup.setText(tabs.getCurrentTabTag());
+	    	}
+	    });
+	
+		//-----------------------------------------------------------------------
+		dir = new File(tarjeta.getAbsolutePath()+"/"+tvPathGroup.getText().toString() +"/"+tvPath.getText().toString());
 
 		File[] filelist = dir.listFiles();
 		
@@ -88,8 +121,18 @@ public class MainActivity extends Activity {
 			
 			//Code for testing   ListView - Adapter Element getView()
 			if (!file.isHidden() & file.isDirectory() ) {
-			elemento = new Elemento(getResources().getDrawable(R.drawable.ic_pencil),file.getName(), "dir",false);
-	        listelements.add(elemento);
+				// create new tabs of directories
+		        TabHost.TabSpec spec=tabs.newTabSpec(file.getName());
+		        
+		       spec.setContent(new TabHost.TabContentFactory() {
+		          public View createTabContent(String tag) {
+		            return(listApps);
+		          }
+		        });
+		        spec.setIndicator(file.getName());
+		        tabs.addTab(spec);
+			//elemento = new Elemento(getResources().getDrawable(R.drawable.ic_pencil),file.getName(), "dir",false);
+	        //listelements.add(elemento);
 			}
 			
 			//Elements to show
@@ -164,7 +207,7 @@ public class MainActivity extends Activity {
                     }
                     // Close CAB
                     mode.finish();
-                    updateview();
+                    updateview(tvPathGroup.getText().toString());
                     return true;
                 default:
                     return false;
@@ -234,6 +277,8 @@ public class MainActivity extends Activity {
 				archive(view,menu);
 			}
 		});
+		
+		
 		return true;
 	}
 	 
@@ -258,7 +303,7 @@ public class MainActivity extends Activity {
 								EditText textitemcontent = (EditText) dialog.findViewById(R.id.editTextItemContent);				
 																
 								if (add_item(textitemname.getText().toString(),textitemcontent.getText().toString())){
-									updateview();
+									updateview(tvPathGroup.getText().toString());
 								}
 								
 								dialog.dismiss();
@@ -288,25 +333,31 @@ public class MainActivity extends Activity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
-		
+		tvPathGroup = (TextView) findViewById(R.id.textViewDirConfig);
+		tvPathGroup.setText(data.getStringExtra("pathgroup")); 
 		if (requestCode==STATIC_INTEGER_VALUE_CONFIG_UPDATE && resultCode== RESULT_OK ){ 
-			updateview();
+			
+			updateview(data.getStringExtra("pathgroup"));
 		}
 		if (requestCode==STATIC_INTEGER_VALUE_CONFIG_ACTUAL && resultCode== RESULT_OK && data.getStringExtra("path")!="" ){
 			tvPath = (TextView) findViewById(R.id.textViewRouteConfig);
-			tvPath.setText(data.getStringExtra("path")); 
+			tvPath.setText(data.getStringExtra("path"));
+			tvPathGroup = (TextView) findViewById(R.id.textViewDirConfig);
+			tvPathGroup.setText(data.getStringExtra("pathgroup")); 
 			// only for testing path route : to delete
 			//tv2 = (TextView) findViewById(R.id.textViewCache);
 			//tv2.setText(data.getStringExtra("path"));
 		}
 	}
 
-	public void updateview (){
+	public void updateview (String tvPathGroup){
 		Intent refresh = new Intent(this, MainActivity.class);
 		tvPath = (TextView) findViewById(R.id.textViewRouteConfig);
+		//tvPathGroup = (TextView) findViewById(R.id.textViewDirConfig);
 		// Get path update
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		refresh.putExtra("path",preferences.getString("route", STATIC_STRING_VALUE_CONFIG_TAGBOX));
+		refresh.putExtra("pathgroup",tvPathGroup);
 	    startActivity(refresh);
 	    this.finish();
 		
@@ -372,14 +423,14 @@ public class MainActivity extends Activity {
 		//tv2 = (TextView) findViewById(R.id.textViewCache);
 		//tv2.setText("archive: "+((TextView) findViewById(R.id.textViewRouteConfig)).getText().toString());
 		
-        updateview();
+        updateview(tvPathGroup.getText().toString());
 		
 
 	}
 	
 	protected boolean delete_item (String filename){
 		File tarjeta = Environment.getExternalStorageDirectory();
-		File tagfile = new File(tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString()+"/"+filename);
+		File tagfile = new File(tarjeta.getAbsolutePath()+"/"+tvPathGroup.getText().toString()+"/"+tvPath.getText().toString()+"/"+filename);
 
 		boolean deleted = tagfile.delete();
 		if (deleted){
@@ -394,7 +445,7 @@ public class MainActivity extends Activity {
 	
 	protected boolean add_item (String filename,String contenido){
 		File tarjeta = Environment.getExternalStorageDirectory();
-		File tagfile = new File(tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString()+"/"+filename);
+		File tagfile = new File(tarjeta.getAbsolutePath()+"/"+tvPathGroup.getText().toString()+"/"+tvPath.getText().toString()+"/"+filename);
 		boolean added = false;
 		try {
 			
