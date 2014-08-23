@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -105,7 +106,8 @@ public class MainActivity extends Activity {
 		        TabHost.TabSpec spec=tabs.newTabSpec(dirgroupitem.getName());
 		        
 		       spec.setContent(new TabHost.TabContentFactory() {
-		          public View createTabContent(String tag) {
+		          @Override
+				public View createTabContent(String tag) {
 		            return(listApps);
 		          }
 		        });
@@ -181,7 +183,7 @@ public class MainActivity extends Activity {
 		//AdapterElements adapter = new AdapterElements(this, arrayelements);
 		listviewadapter = new AdapterElements(this,R.layout.element, listelements);
 		listApps.setAdapter(listviewadapter);
-		listApps.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		listApps.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
 				
 		
 		// Capture ListView item click
@@ -266,6 +268,7 @@ public class MainActivity extends Activity {
 		Button buttonSync = (Button) findViewById(R.id.buttonSync);
 		
 		buttonSync.setOnClickListener (new OnClickListener() {
+			@Override
 			public void onClick(View view) {
 				//Toast.makeText(MainActivity.this, "Button Sync Clicked", Toast.LENGTH_SHORT).show();
 				sync(view);
@@ -276,6 +279,7 @@ public class MainActivity extends Activity {
         Button buttonArchive = (Button) findViewById(R.id.buttonArchive);
         
 		buttonArchive.setOnClickListener (new OnClickListener() {
+			@Override
 			public void onClick(View view) {
 				//Toast.makeText(MainActivity.this, "Button Archive Clicked", Toast.LENGTH_SHORT).show();
 				
