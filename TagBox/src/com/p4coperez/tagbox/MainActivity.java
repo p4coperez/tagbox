@@ -90,6 +90,8 @@ public class MainActivity extends Activity {
 		startActivityForResult(p,STATIC_INTEGER_VALUE_CONFIG_ACTUAL);
 		
 		
+		// show groups
+		
 		dir = new File(tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString());
 
 		File[] dirgroup = dir.listFiles();
@@ -119,9 +121,7 @@ public class MainActivity extends Activity {
 		}
 		}
 		
-		//-----------------------------------------------------------------------
-
-	    
+		// get group to show after to archive
 	    if (!tvPathGroup.equals(tabs.getCurrentTabTag()) || tvPathGroup != null){
 	    	tabs.setCurrentTabByTag(tvPathGroup.getText().toString());
 	    }
@@ -137,9 +137,14 @@ public class MainActivity extends Activity {
 	        updateview(tvPathGroup.getText().toString());
 	    	}
 	    });
-	
-		//-----------------------------------------------------------------------
-		dir = new File(tarjeta.getAbsolutePath()+"/"+tvPathGroup.getText().toString() +"/"+tvPath.getText().toString());
+	    
+	    // get tabs after configuration
+	    if (tvPathGroup.getText().toString() == STATIC_STRING_VALUE_CONFIG_TAGBOX_GROUP){
+	    	tvPathGroup.setText(tabs.getCurrentTabTag());
+	    }
+	    
+		 // get elements
+		dir = new File(tarjeta.getAbsolutePath() +"/"+tvPath.getText().toString()+"/"+tvPathGroup.getText().toString());
 
 		File[] filelist = dir.listFiles();
 		
@@ -166,7 +171,6 @@ public class MainActivity extends Activity {
 				    
 				    //Get element to show on AdapterElements
 				    elemento = new Elemento(getResources().getDrawable(R.drawable.ic_pencil),file.getName(), text.toString(),false);
-			        //elemento = new Elemento(getResources().getDrawable(R.drawable.ic_launcher),file.getName(), text.substring(6).toString(),new Boolean (text.substring(0, 5).toString()));
 			        listelements.add(elemento);
 				 
 				}
@@ -246,8 +250,7 @@ public class MainActivity extends Activity {
                     if (selected.valueAt(i)) {
                         Elemento selecteditem = listviewadapter
                                 .getItem(selected.keyAt(i));
-                        // Remove selected items following the ids
-                     // Set checked
+                        // Set checked to false
                         selecteditem.setChecked(false);
                     }
                 }
@@ -259,7 +262,6 @@ public class MainActivity extends Activity {
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
                 // TODO Auto-generated method stub
-            	//listviewadapter.removeSelection();
                 return false;
             }
         });
@@ -348,8 +350,10 @@ public class MainActivity extends Activity {
 								EditText textgroupname = (EditText) dialoggroup.findViewById(R.id.editTextGroupName);							
 												
 																
-								if (add_group(textgroupname.getText().toString(),tvPathGroup.getText().toString())){
-									updateview(tvPathGroup.getText().toString());
+								if (add_group(textgroupname.getText().toString(),STATIC_STRING_VALUE_CONFIG_TAGBOX_GROUP)){
+									// show new group by default
+									//updateview(tvPathGroup.getText().toString());
+									updateview(textgroupname.getText().toString());
 								}
 								
 								dialoggroup.dismiss();
@@ -434,7 +438,6 @@ public class MainActivity extends Activity {
 		Toast.makeText(MainActivity.this, synctext.toString() , Toast.LENGTH_SHORT).show();
 
 		launchApp(STATIC_STRING_APP_DROPSYNC);
-		
 		// only for testing path route : to delete
 		//tv2 = (TextView) findViewById(R.id.textViewCache);
 		//tv2.setText("sync: "+((TextView) findViewById(R.id.textViewRouteConfig)).getText().toString());
@@ -475,22 +478,23 @@ public class MainActivity extends Activity {
 	
 	protected boolean delete_item (String filename, String tvPathGroup){
 		File tarjeta = Environment.getExternalStorageDirectory();
-		File tagfile = new File(tarjeta.getAbsolutePath()+"/"+tvPathGroup+"/"+tvPath.getText().toString()+"/"+filename);
+		File tagfile = new File(tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString()+"/"+tvPathGroup+"/"+filename);
 
 		boolean deleted = tagfile.delete();
 		if (deleted){
-			//Toast.makeText(this, "File deleted: " + tagfile.getName(),Toast.LENGTH_SHORT).show();
+			//String deleteitemtext= getString(R.string.deleteitem);
+			//Toast.makeText(this, deleteitemtext+" " + tagfile.getName(),Toast.LENGTH_SHORT).show();
 		}
 		else{
 			String errordeleteitemtext= getString(R.string.errordeleteitem);
-			Toast.makeText(this, errordeleteitemtext+ " "+ tagfile.getName(),Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, errordeleteitemtext+ " "+tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString()+"/"+tvPathGroup+"/"+tagfile.getName(),Toast.LENGTH_SHORT).show();
 		}
 		return deleted;
 	}
 	
 	protected boolean add_item (String filename,String contenido,String tvPathGroup ){
 		File tarjeta = Environment.getExternalStorageDirectory();
-		File tagfile = new File(tarjeta.getAbsolutePath()+"/"+tvPathGroup+"/"+tvPath.getText().toString()+"/"+filename);
+		File tagfile = new File(tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString()+"/"+tvPathGroup+"/"+filename);
 		boolean added = false;
 		try {
 			
@@ -500,37 +504,34 @@ public class MainActivity extends Activity {
 			osw.flush();
 			osw.close();
 			added = true;
-			Toast.makeText(this, "File added: "+ tagfile.getName()+"  --- ruta:" +tarjeta.getAbsolutePath()+"/"+tvPathGroup+"/",Toast.LENGTH_SHORT).show();
+			//String additemtext= getString(R.string.additem);
+			//Toast.makeText(this, additemtext+" "+ tagfile.getName()+"  --- ruta:" +tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString()+"/"+tvPathGroup+"/",Toast.LENGTH_SHORT).show();
 			
 			//iv1.setImageResource(R.id.imageButtonArchive);
 		} catch (IOException e) {
 			String erroradditemtext= getString(R.string.erroradditem);
-			Toast.makeText(this, erroradditemtext + " " + tagfile.getName()+"  --- ruta:" +tarjeta.getAbsolutePath()+"/"+tvPathGroup+"/",Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, erroradditemtext + " " + tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString()+"/"+tvPathGroup+"/"+tagfile.getName(),Toast.LENGTH_SHORT).show();
 		}
 		return added;
 	}
 
 	protected boolean add_group (String filedir, String tvPathGroup ){
 		File tarjeta = Environment.getExternalStorageDirectory();
-		File dirfile = new File(tarjeta.getAbsolutePath()+"/"+tvPathGroup+"/"+tvPath.getText().toString()+"/"+filedir);
+		File dirfile = new File(tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString()+"/"+tvPathGroup+"/"+filedir);
 		boolean added = false;
 		//try {
 		if (!dirfile.exists()) {
 	        if (!dirfile.mkdirs()) {
-	        	String erroraddgrouptext= getString(R.string.erroradditem);
-	    		Toast.makeText(this, erroraddgrouptext + " " + dirfile.getName()+"  --- ruta:" +tarjeta.getAbsolutePath()+"/"+tvPathGroup+"/",Toast.LENGTH_SHORT).show();	
+	        	String erroraddgrouptext= getString(R.string.erroraddgroup);
+	    		Toast.makeText(this, erroraddgrouptext + " " + tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString()+"/"+tvPathGroup+"/"+dirfile.getName(),Toast.LENGTH_SHORT).show();	
 	        }
 	        else{
-	        	Toast.makeText(this, "Dir added: "+ dirfile.getName()+"  --- ruta:" +tarjeta.getAbsolutePath()+"/"+tvPathGroup+"/",Toast.LENGTH_SHORT).show();
-				
+	        	//String addgrouptext= getString(R.string.addgroup);
+	        	//Toast.makeText(this, addgrouptext+" "+ dirfile.getName()+"  --- ruta:" +tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString()+"/"+tvPathGroup+"/",Toast.LENGTH_SHORT).show();
+	        	added = true;
 	        }
 		}
 	        	
-			//iv1.setImageResource(R.id.imageButtonArchive);
-		//} catch (IOException e) {
-		//	String erroraddgrouptext= getString(R.string.erroradditem);
-		//	Toast.makeText(this, erroraddgrouptext + " " + tagfile.getName()+"  --- ruta:" +tarjeta.getAbsolutePath()+"/"+tvPathGroup+"/",Toast.LENGTH_SHORT).show();
-		//}
 		return added;
 	}
 
