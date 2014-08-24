@@ -46,7 +46,7 @@ public class MainActivity extends Activity {
 	private static final String STATIC_STRING_VALUE_CONFIG_TAGBOX_GROUP = "/";
 	private static final String STATIC_STRING_APP_DROPSYNC = "com.ttxapps.dropsync";
 	private static final String STATIC_STRING_CONFIG_FONTS ="fonts/mvboli.ttf";
-
+	
 	TextView tvPath;
 	TextView tvPathGroup;
 	ArrayList <String> checkedValue;
@@ -128,10 +128,10 @@ public class MainActivity extends Activity {
 		
 		}
 		// set size text on Tabs Group
-		for (int i = 0; i < tabs.getTabWidget().getChildCount(); i++) {
+		/*for (int i = 0; i < tabs.getTabWidget().getChildCount(); i++) {
 	        TextView tv = (TextView) tabs.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
 	        tv.setTextSize(9);
-	    }
+	    }*/
 		
 		// get group to show after to archive
 	    if (!tvPathGroup.equals(tabs.getCurrentTabTag()) && tvPathGroup.getText().toString() != STATIC_STRING_VALUE_CONFIG_TAGBOX_GROUP){
