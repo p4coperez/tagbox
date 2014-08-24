@@ -26,9 +26,10 @@
     <string name="additem">Añadiendo elemento:</string>
     <string name="deleteitem">Borrando elemento:</string>
     <string name="new_group">Nuevo Grupo</string>
+    <string name="delete_group">Borrar Grupo</string>
     <string name="groupname_title">Grupo</string>
     <string name="erroraddgroup">Error añadiendo grupo:</string>
-    <string name="errordeletegroup">Error borrando grupo:</string>
+    <string name="errordeletegroup">Error borrando grupo, por favor vacie el grupo:</string>
     <string name="addgroup">Añadiendo grupo:</string>
     <string name="deletegroup">Borrando grupo:</string>
     
@@ -54,9 +55,10 @@
     <string name="additem">Adding item:</string>
     <string name="deleteitem">Deleting item:</string>
     <string name="new_group">New Group</string>
+    <string name="delete_group">Delete Group</string>
     <string name="groupname_title">Group</string>
     <string name="erroraddgroup">Error adding group:</string>
-    <string name="errordeletegroup">Error deleting group:</string>
+    <string name="errordeletegroup">Error deleting group, please empty the group:</string>
     <string name="addgroup">Adding group:</string>
     <string name="deletegroup">Deleting group:</string>
     

@@ -47,10 +47,10 @@ public class MainActivity extends Activity {
 
 	TextView tvPath;
 	TextView tvPathGroup;
-	TextView tv2;
 	ArrayList <String> checkedValue;
 	ListView listApps;
 	AdapterElements listviewadapter;
+	TabHost tabs;
 	
 	
 	@Override
@@ -74,7 +74,7 @@ public class MainActivity extends Activity {
 		tvPath.setText(preferences.getString("route", STATIC_STRING_VALUE_CONFIG_TAGBOX));		
 		tvPathGroup.setText(STATIC_STRING_VALUE_CONFIG_TAGBOX_GROUP);
 		
-		final TabHost tabs=(TabHost)findViewById(R.id.tabhost);
+		tabs=(TabHost)findViewById(R.id.tabhost);
 	    
 	    tabs.setup();
 		
@@ -98,6 +98,7 @@ public class MainActivity extends Activity {
 		
 		if (dirgroup != null) {
 		
+		
 		for (int i = 0; i < dirgroup.length; i++) {
 			//Get the text file
 			File dirgroupitem = new File(dirgroup[i].toString());
@@ -106,7 +107,7 @@ public class MainActivity extends Activity {
 			if (!dirgroupitem.isHidden() & dirgroupitem.isDirectory() ) {
 				// create new tabs of directories
 		        TabHost.TabSpec spec=tabs.newTabSpec(dirgroupitem.getName());
-		        
+		     // set by default the first group tabs
 		       spec.setContent(new TabHost.TabContentFactory() {
 		          @Override
 				public View createTabContent(String tag) {
@@ -119,11 +120,19 @@ public class MainActivity extends Activity {
 			}
 		
 		}
-		}
 		
+		}
+				
 		// get group to show after to archive
-	    if (!tvPathGroup.equals(tabs.getCurrentTabTag()) || tvPathGroup != null){
+	    if (!tvPathGroup.equals(tabs.getCurrentTabTag()) && tvPathGroup.getText().toString() != STATIC_STRING_VALUE_CONFIG_TAGBOX_GROUP){
 	    	tabs.setCurrentTabByTag(tvPathGroup.getText().toString());
+	    }
+	    else{
+			p.putExtra("itemSelected",false);
+			tabs.setCurrentTab(0);
+			p.putExtra("pathgroup",tabs.getCurrentTabTag());
+			tabs.setCurrentTabByTag(tabs.getCurrentTabTag());
+			startActivityForResult(p,STATIC_INTEGER_VALUE_CONFIG_ACTUAL);
 	    }
 	    
 	    tabs.setOnTabChangedListener(new OnTabChangeListener() {
@@ -350,7 +359,7 @@ public class MainActivity extends Activity {
 								EditText textgroupname = (EditText) dialoggroup.findViewById(R.id.editTextGroupName);							
 												
 																
-								if (add_group(textgroupname.getText().toString(),STATIC_STRING_VALUE_CONFIG_TAGBOX_GROUP)){
+								if (add_group(textgroupname.getText().toString())){
 									// show new group by default
 									//updateview(tvPathGroup.getText().toString());
 									updateview(textgroupname.getText().toString());
@@ -363,6 +372,39 @@ public class MainActivity extends Activity {
 						});
 			 
 			 dialoggroup.show();
+			break;
+			
+		case R.id.delete_group:
+			// custom dialog
+			final Dialog dialoggroupdelete = new Dialog(this);
+			dialoggroupdelete.setContentView(R.layout.delete_group);
+			String delete_grouptext= getString(R.string.delete_group);
+			dialoggroupdelete.setTitle(delete_grouptext);
+			TextView textgroupname = (TextView) dialoggroupdelete.findViewById(R.id.editTextGroupNameDelete);							
+			textgroupname.setText(tvPathGroup.getText().toString());
+			
+			Button dialogButtonGroupDelete = (Button) dialoggroupdelete.findViewById(R.id.buttonGroupButtonDelete);
+						// if button is clicked, close the custom dialog
+						dialogButtonGroupDelete.setOnClickListener(new OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								// get the custom dialog components - texts
+												
+																
+								if (delete_group(tvPathGroup.getText().toString())){
+									// show none group by default
+									//updateview(tvPathGroup.getText().toString());
+									tabs.setCurrentTab(tabs.indexOfChild(v)+1);
+									updateview(tabs.getCurrentTabTag());
+								}
+								
+								dialoggroupdelete.dismiss();
+								
+								
+							}
+						});
+			 
+			 dialoggroupdelete.show();
 			break;
 			
 		case R.id.config:
@@ -402,7 +444,6 @@ public class MainActivity extends Activity {
 
 	public void updateview (String tvPathGroup){
 		Intent refresh = new Intent(this, MainActivity.class);
-
 		// Get path update
 		SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		refresh.putExtra("path",preferences.getString("route", STATIC_STRING_VALUE_CONFIG_TAGBOX));
@@ -515,24 +556,44 @@ public class MainActivity extends Activity {
 		return added;
 	}
 
-	protected boolean add_group (String filedir, String tvPathGroup ){
+	protected boolean add_group (String filedir ){
 		File tarjeta = Environment.getExternalStorageDirectory();
-		File dirfile = new File(tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString()+"/"+tvPathGroup+"/"+filedir);
+		File dirfile = new File(tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString()+"/"+filedir);
 		boolean added = false;
 		//try {
 		if (!dirfile.exists()) {
 	        if (!dirfile.mkdirs()) {
 	        	String erroraddgrouptext= getString(R.string.erroraddgroup);
-	    		Toast.makeText(this, erroraddgrouptext + " " + tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString()+"/"+tvPathGroup+"/"+dirfile.getName(),Toast.LENGTH_SHORT).show();	
+	    		Toast.makeText(this, erroraddgrouptext + " " + tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString()+"/"+dirfile.getName(),Toast.LENGTH_SHORT).show();	
 	        }
 	        else{
 	        	//String addgrouptext= getString(R.string.addgroup);
-	        	//Toast.makeText(this, addgrouptext+" "+ dirfile.getName()+"  --- ruta:" +tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString()+"/"+tvPathGroup+"/",Toast.LENGTH_SHORT).show();
+	        	//Toast.makeText(this, addgrouptext+" "+ dirfile.getName()+"  --- ruta:" +tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString()+"/",Toast.LENGTH_SHORT).show();
 	        	added = true;
 	        }
 		}
 	        	
 		return added;
+	}
+	
+	protected boolean delete_group (String filedir){
+		File tarjeta = Environment.getExternalStorageDirectory();
+		File dirfile = new File(tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString()+"/"+filedir);
+		boolean deleted = false;
+		//try {
+		if (dirfile.exists()) {
+	        if (!dirfile.delete()) {
+	        	String errordeletegrouptext= getString(R.string.errordeletegroup);
+	    		Toast.makeText(this, errordeletegrouptext + " " + tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString()+"/"+dirfile.getName(),Toast.LENGTH_SHORT).show();	
+	        }
+	        else{
+	        	//String deletegrouptext= getString(R.string.addgroup);
+	        	//Toast.makeText(this, deletegrouptext+" "+ dirfile.getName()+"  --- ruta:" +tarjeta.getAbsolutePath()+"/"+tvPath.getText().toString()+"/",Toast.LENGTH_SHORT).show();
+	        	deleted = true;
+	        }
+		}
+	        	
+		return deleted;
 	}
 
 }
