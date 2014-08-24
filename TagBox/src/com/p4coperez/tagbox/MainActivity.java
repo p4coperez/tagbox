@@ -15,6 +15,7 @@ import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -44,6 +45,7 @@ public class MainActivity extends Activity {
 	private static final String STATIC_STRING_VALUE_CONFIG_TAGBOX = "tagbox";
 	private static final String STATIC_STRING_VALUE_CONFIG_TAGBOX_GROUP = "/";
 	private static final String STATIC_STRING_APP_DROPSYNC = "com.ttxapps.dropsync";
+	private static final String STATIC_STRING_CONFIG_FONTS ="fonts/mvboli.ttf";
 
 	TextView tvPath;
 	TextView tvPathGroup;
@@ -51,13 +53,16 @@ public class MainActivity extends Activity {
 	ListView listApps;
 	AdapterElements listviewadapter;
 	TabHost tabs;
-	
+	Typeface face;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		//Font by default
+		FontsOverride.setDefaultFont(this, "MONOSPACE", STATIC_STRING_CONFIG_FONTS);
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		
 		listApps = (ListView) findViewById(android.R.id.list);
 		List<Elemento> listelements = new ArrayList<Elemento>();
@@ -122,7 +127,12 @@ public class MainActivity extends Activity {
 		}
 		
 		}
-				
+		// set size text on Tabs Group
+		for (int i = 0; i < tabs.getTabWidget().getChildCount(); i++) {
+	        TextView tv = (TextView) tabs.getTabWidget().getChildAt(i).findViewById(android.R.id.title);
+	        tv.setTextSize(9);
+	    }
+		
 		// get group to show after to archive
 	    if (!tvPathGroup.equals(tabs.getCurrentTabTag()) && tvPathGroup.getText().toString() != STATIC_STRING_VALUE_CONFIG_TAGBOX_GROUP){
 	    	tabs.setCurrentTabByTag(tvPathGroup.getText().toString());
@@ -595,5 +605,5 @@ public class MainActivity extends Activity {
 	        	
 		return deleted;
 	}
-
+	
 }
