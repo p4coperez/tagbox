@@ -13,7 +13,6 @@ public class Configuration extends PreferenceActivity {
 	TextView textviewPath;
 
 	/** Called when the activity is first created */
-	@SuppressWarnings("deprecation")
 	@Override
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);

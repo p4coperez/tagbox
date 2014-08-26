@@ -2,9 +2,7 @@
 <resources>
 	<string name="route">route</string>
 	<string name="routegroup">routegroup</string>
-	
-    
-<!--   SPANISH
+
  	<string name="app_name">TagBox</string>
     <string name="aboutto">Acerca de &#8230;</string>
     <string name="config">Configuración</string>
@@ -32,35 +30,5 @@
     <string name="errordeletegroup">Error borrando grupo, por favor vacie el grupo:</string>
     <string name="addgroup">Añadiendo grupo:</string>
     <string name="deletegroup">Borrando grupo:</string>
-    
--->
-    <string name="app_name">TagBox</string>
-    <string name="aboutto">About to &#8230;</string>
-    <string name="config">Configuration</string>
-    <string name="route_title">Select directory path</string>
-    <string name="route_text">Dir shared with Dropsync from \'/sdcard/\'</string>
-    <string name="aboutto_text">easy to control a item list and synchronized application with dropsync (Dropbox).\n\nThis program has been developed by @p4coperez.</string>
-    <string name="text_archive_button">Click me to save list</string>
-    <string name="text_sync_button">Click me to download list from Dropbox</string>
-    <string name="icon_element_description">TagBox</string>
-    <string name="archive">Updated</string>
-    <string name="sync">Synchronize</string>
-    <string name="selected">Selected</string>
-    <string name="app_not_found">Dropsync: App not found</string>
-    <string name="itemname_title">Item</string>
-    <string name="itemcontent_title">Count</string>
-    <string name="new_item">New item</string>
-    <string name="erroradditem">Error adding item:</string>
-    <string name="errordeleteitem">Error deleting item:</string>
-    <string name="additem">Adding item:</string>
-    <string name="deleteitem">Deleting item:</string>
-    <string name="new_group">New Group</string>
-    <string name="delete_group">Delete Group</string>
-    <string name="groupname_title">Group</string>
-    <string name="erroraddgroup">Error adding group:</string>
-    <string name="errordeletegroup">Error deleting group, please empty the group:</string>
-    <string name="addgroup">Adding group:</string>
-    <string name="deletegroup">Deleting group:</string>
-    
     
 </resources>

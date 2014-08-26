@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,27 +18,27 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-
+import android.support.v4.app.NotificationCompat.Action;
 import android.util.SparseBooleanArray;
-import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-
-import android.widget.AbsListView;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.TabHost;
 
-import android.widget.AbsListView.MultiChoiceModeListener;
-
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnItemSelectedListener, OnItemClickListener  {
 	private static final int STATIC_INTEGER_VALUE_CONFIG_UPDATE = 4357;
 	private static final int STATIC_INTEGER_VALUE_CONFIG_ACTUAL = 0000;
 	private static final String STATIC_STRING_VALUE_CONFIG_TAGBOX = "tagbox";
@@ -50,8 +49,8 @@ public class MainActivity extends Activity {
 	TextView tvPath;
 	TextView tvPathGroup;
 	ArrayList <String> checkedValue;
-	ListView listApps;
 	AdapterElements listviewadapter;
+	ListView listApps;
 	TabHost tabs;
 	Typeface face;
 	
@@ -201,84 +200,12 @@ public class MainActivity extends Activity {
 		//AdapterElements adapter = new AdapterElements(this, arrayelements);
 		listviewadapter = new AdapterElements(this,R.layout.element, listelements);
 		listApps.setAdapter(listviewadapter);
-		listApps.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
+		listApps.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 				
 		
 		// Capture ListView item click
-        listApps.setMultiChoiceModeListener(new MultiChoiceModeListener() {
- 
-            @Override
-            public void onItemCheckedStateChanged(ActionMode mode,
-                    int position, long id, boolean checked) {
-                // Capture total checked items
-                final int checkedCount = listApps.getCheckedItemCount();
-                // Set the CAB title according to total checked items
-                String selecttext= getString(R.string.selected);
-                mode.setTitle(checkedCount + " " +selecttext);
-                // Calls toggleSelection method from AdapterElements Class
-                listviewadapter.toggleSelection(position);
-                // Set checked
-                listviewadapter.getElemento().get(position).setChecked(checked);
-
-            }
- 
-            @Override
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                switch (item.getItemId()) {
-                case R.id.archive:
-                    // Calls getSelectedIds method from AdapterElements Class
-                    SparseBooleanArray selected = listviewadapter
-                            .getSelectedIds();
-                    // Captures all selected ids with a loop
-                    for (int i = (selected.size() - 1); i >= 0; i--) {
-                        if (selected.valueAt(i)) {
-                            Elemento selecteditem = listviewadapter
-                                    .getItem(selected.keyAt(i));
-                            // Remove selected items following the ids
-                            listviewadapter.remove(selecteditem);
-                        }
-                    }
-                    // Close CAB
-                    mode.finish();
-                    updateview(tvPathGroup.getText().toString());
-                    return true;
-                default:
-                    return false;
-                }
-            }
- 
-            @Override
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                mode.getMenuInflater().inflate(R.menu.activity_archive, menu);
-       		
-                return true;
-            }
- 
-            @Override
-            public void onDestroyActionMode(ActionMode mode) {
-            	// Calls getSelectedIds method from AdapterElements Class
-                SparseBooleanArray selected = listviewadapter
-                        .getSelectedIds();
-                // Captures all selected ids with a loop
-                for (int i = (selected.size() - 1); i >= 0; i--) {
-                    if (selected.valueAt(i)) {
-                        Elemento selecteditem = listviewadapter
-                                .getItem(selected.keyAt(i));
-                        // Set checked to false
-                        selecteditem.setChecked(false);
-                    }
-                }
-                
-                listviewadapter.removeSelection();
-                // all file set checked to false
-            }
- 
-            @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                // TODO Auto-generated method stub
-                return false;
-            }
-        });
+		listApps.setOnItemSelectedListener(this);
+		listApps.setOnItemClickListener(this);
 
 		// Button Sync
 		Button buttonSync = (Button) findViewById(R.id.buttonSync);
@@ -600,5 +527,109 @@ public class MainActivity extends Activity {
 	        	
 		return deleted;
 	}
+
+	@Override
+	public void onItemSelected(AdapterView<?> l, View v, int position,
+            long id) {    
+	   // Toast.makeText(MainActivity.this, "Tab Clicked: "+position+" - tabsCurrent: "+tabs.getCurrentTabTag() + "-> tvPathGroup: "+tvPathGroup.getText().toString(), Toast.LENGTH_SHORT).show();
+
+    }
+	@Override
+    public void onNothingSelected(AdapterView<?> l) {
+    	//Toast.makeText(MainActivity.this, "Nothing Clicked: ", Toast.LENGTH_SHORT).show()  
+    }
+
+	@Override
+	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
+		
+		ViewGroup row = (ViewGroup)v;
+	    CheckBox check = (CheckBox) row.findViewById(R.id.checkBox);            
+	    check.toggle();
+	    boolean checked = false;
+	    
+        // Calls toggleSelection method from AdapterElements Class
+        listviewadapter.toggleSelection(position);
+        // Set checked
+        if (listviewadapter.getElemento().get(position).getChecked()){
+        	checked= false;
+        }
+        else{
+        	checked= true;
+        }
+        
+        check.setChecked(checked);
+        listviewadapter.getElemento().get(position).setChecked(checked);
+	    
+	    //Toast.makeText(MainActivity.this, "Tab Clicked: "+position+" - tabsCurrent: "+tabs.getCurrentTabTag() + "-> tvPathGroup: "+tvPathGroup.getText().toString(), Toast.LENGTH_SHORT).show();
+		
+	}
+
+    public boolean onActionItemClicked(Action mode, MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.archive:
+            // Calls getSelectedIds method from AdapterElements Class
+            SparseBooleanArray selected = listviewadapter
+                    .getSelectedIds();
+            // Captures all selected ids with a loop
+            for (int i = (selected.size() - 1); i >= 0; i--) {
+                if (selected.valueAt(i)) {
+                    Elemento selecteditem = listviewadapter
+                            .getItem(selected.keyAt(i));
+                    // Remove selected items following the ids
+                    listviewadapter.remove(selecteditem);
+                }
+            }
+            // Close CAB
+            // mode.finish();
+            updateview(tvPathGroup.getText().toString());
+            return true;
+        default:
+            return false;
+        }
+    }
+	 /*
+
+    @Override
+    public void onItemCheckedStateChanged(ActionMode mode,
+            int position, long id, boolean checked) {
+
+
+    }
+
+
+
+    @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        mode.getMenuInflater().inflate(R.menu.activity_archive, menu);
+		
+        return true;
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+    	// Calls getSelectedIds method from AdapterElements Class
+        SparseBooleanArray selected = listviewadapter
+                .getSelectedIds();
+        // Captures all selected ids with a loop
+        for (int i = (selected.size() - 1); i >= 0; i--) {
+            if (selected.valueAt(i)) {
+                Elemento selecteditem = listviewadapter
+                        .getItem(selected.keyAt(i));
+                // Set checked to false
+                selecteditem.setChecked(false);
+            }
+        }
+        
+        listviewadapter.removeSelection();
+        // all file set checked to false
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+*/
+	
 	
 }
