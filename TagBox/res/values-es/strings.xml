@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="route">route</string>
+	<string name="routegroup">routegroup</string>
+	
+ 	<string name="app_name">TagBox</string>
+    <string name="aboutto">Acerca de &#8230;</string>
+    <string name="config">Configuración</string>
+    <string name="route_title">Seleccionar ruta del directorio</string>
+    <string name="route_text">Ruta compartida con Dropsync desde \'/sdcard/\'</string>
+    <string name="aboutto_text">Facil de control de una lista de elementos y la aplicación sincronizada con Dropsync (Dropbox).\n\nEste programa ha sido desarrollado por @p4coperez.</string>
+    <string name="text_archive_button">Pulsame para guardar la lista</string>
+    <string name="text_sync_button">Pulsame para descargar la lista desde Dropbox</string>
+    <string name="icon_element_description">TagBox</string>
+    <string name="archive">Actualizar</string>
+    <string name="sync">Sincronizar</string>
+    <string name="selected">Seleccionados</string>
+    <string name="app_not_found">Dropsync: Aplicacion no encontrada</string>
+    <string name="itemname_title">Elemento</string>
+    <string name="itemcontent_title">Cantidad</string>
+    <string name="new_item">Nuevo Elemento</string>
+    <string name="erroradditem">Error añadiendo elemento:</string>
+    <string name="errordeleteitem">Error borrando elemento:</string>
+    <string name="additem">Añadiendo elemento:</string>
+    <string name="deleteitem">Borrando elemento:</string>
+    <string name="new_group">Nuevo Grupo</string>
+    <string name="delete_group">Borrar Grupo</string>
+    <string name="groupname_title">Grupo</string>
+    <string name="erroraddgroup">Error añadiendo grupo:</string>
+    <string name="errordeletegroup">Error borrando grupo, por favor vacie el grupo:</string>
+    <string name="addgroup">Añadiendo grupo:</string>
+    <string name="deletegroup">Borrando grupo:</string>
+   
+</resources>
