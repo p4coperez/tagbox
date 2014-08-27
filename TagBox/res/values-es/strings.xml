@@ -8,7 +8,7 @@
     <string name="config">Configuración</string>
     <string name="route_title">Seleccionar ruta del directorio</string>
     <string name="route_text">Ruta compartida con Dropsync desde \'/sdcard/\'</string>
-    <string name="aboutto_text">Facil de control de una lista de elementos y la aplicación sincronizada con Dropsync (Dropbox).\n\nEste programa ha sido desarrollado por @p4coperez.</string>
+    <string name="aboutto_text">Facil control de una lista de elementos y la aplicación sincronizada con Dropsync (Dropbox).\n\nEste programa ha sido desarrollado por @p4coperez.</string>
     <string name="text_archive_button">Pulsame para guardar la lista</string>
     <string name="text_sync_button">Pulsame para descargar la lista desde Dropbox</string>
     <string name="icon_element_description">TagBox</string>
