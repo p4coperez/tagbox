@@ -543,23 +543,19 @@ public class MainActivity extends Activity implements OnItemSelectedListener, On
 	public void onItemClick(AdapterView<?> l, View v, int position, long id) {
 		
 		ViewGroup row = (ViewGroup)v;
-	    CheckBox check = (CheckBox) row.findViewById(R.id.checkBox);            
+	    CheckBox check = (CheckBox) row.findViewById(R.id.checkBox);	    
 	    check.toggle();
 	    boolean checked = false;
 	    
         // Calls toggleSelection method from AdapterElements Class
         listviewadapter.toggleSelection(position);
         // Set checked
-        if (listviewadapter.getElemento().get(position).getChecked()){
-        	checked= false;
-        }
-        else{
+        if (!listviewadapter.getElemento().get(position).getChecked()){
         	checked= true;
         }
-        
+
         check.setChecked(checked);
         listviewadapter.getElemento().get(position).setChecked(checked);
-	    
 	    //Toast.makeText(MainActivity.this, "Tab Clicked: "+position+" - tabsCurrent: "+tabs.getCurrentTabTag() + "-> tvPathGroup: "+tvPathGroup.getText().toString(), Toast.LENGTH_SHORT).show();
 		
 	}
@@ -587,49 +583,5 @@ public class MainActivity extends Activity implements OnItemSelectedListener, On
             return false;
         }
     }
-	 /*
-
-    @Override
-    public void onItemCheckedStateChanged(ActionMode mode,
-            int position, long id, boolean checked) {
-
-
-    }
-
-
-
-    @Override
-    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        mode.getMenuInflater().inflate(R.menu.activity_archive, menu);
-		
-        return true;
-    }
-
-    @Override
-    public void onDestroyActionMode(ActionMode mode) {
-    	// Calls getSelectedIds method from AdapterElements Class
-        SparseBooleanArray selected = listviewadapter
-                .getSelectedIds();
-        // Captures all selected ids with a loop
-        for (int i = (selected.size() - 1); i >= 0; i--) {
-            if (selected.valueAt(i)) {
-                Elemento selecteditem = listviewadapter
-                        .getItem(selected.keyAt(i));
-                // Set checked to false
-                selecteditem.setChecked(false);
-            }
-        }
-        
-        listviewadapter.removeSelection();
-        // all file set checked to false
-    }
-
-    @Override
-    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        // TODO Auto-generated method stub
-        return false;
-    }
-*/
-	
 	
 }
