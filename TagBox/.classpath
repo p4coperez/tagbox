@@ -3,7 +3,7 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
-	<classpathentry kind="lib" path="/home/fperez/workspace_android/android-sdk-linux/platforms/android-15/android.jar" sourcepath="/home/fperez/workspace_android/android-sdk-linux/sources/android-15">
+	<classpathentry kind="lib" path="/home/paco/workspace_android/android-sdk-linux/platforms/android-15/android.jar" sourcepath="/home/fperez/workspace_android/android-sdk-linux/sources/android-15">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/home/fperez/workspace_android/android-sdk-linux/docs/reference"/>
 		</attributes>
@@ -11,7 +11,7 @@
 			<accessrule kind="nonaccessible" pattern="com/android/internal/**"/>
 		</accessrules>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/fperez/workspace_android/tagbox/TagBox/libs/dropbox-sync-sdk-android.jar"/>
+	<classpathentry kind="lib" path="/home/paco/workspace_android/tagbox_2.3.3/TagBox/libs/dropbox-sync-sdk-android.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="output" path="bin/classes"/>
