@@ -33,19 +33,9 @@ public class Configuration extends PreferenceActivity {
 	 			if(key.equals(getResources().getString(R.string.route))){
 	 				 //Preference pref = findPreference("route");
 	 				 Bundle extras = getIntent().getExtras();
-	 				 
-	 				 		
-/*	 				//ThemeUtil.setTheme(PreferenceView.this, sharedPreferences.getString(key, ""));	 			    
-	 				 // Create object of SharedPreferences.
-	 				 //now get Editor
-	 				 SharedPreferences.Editor editor = pref.getEditor();
-	 				 //put your value
-	 				 editor.putString("path", sharedPreferences.getString("route", "sdcard"));
-
-	 				 //commits your edits
-	 				 editor.commit();
+	 						 		
 	 				  // Return value path to MainActivity to sync with dropbox
-*/					if (extras.getBoolean("itemSelected")){
+				if (extras.getBoolean("itemSelected")){
 						//pref.setSummary(sharedPreferences.getString("route", "sdcard"));
 	 					Intent p = new Intent();
 	 					p.putExtra("path", sharedPreferences.getString("route", STATIC_STRING_VALUE_CONFIG_TAGBOX));

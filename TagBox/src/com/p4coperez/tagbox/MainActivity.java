@@ -175,7 +175,8 @@ public class MainActivity extends Activity {
 				text = new StringBuilder();
 
 				try {
-				    BufferedReader br = new BufferedReader(new FileReader(file));
+				    @SuppressWarnings("resource")
+					BufferedReader br = new BufferedReader(new FileReader(file));
 				    String line;
 
 				    while ((line = br.readLine()) != null) {
