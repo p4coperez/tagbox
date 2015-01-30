@@ -174,8 +174,7 @@ public class MainActivity extends Activity implements OnItemSelectedListener, On
 				text = new StringBuilder();
 
 				try {
-				    @SuppressWarnings("resource")
-					BufferedReader br = new BufferedReader(new FileReader(file));
+				    BufferedReader br = new BufferedReader(new FileReader(file));
 				    String line;
 
 				    while ((line = br.readLine()) != null) {
