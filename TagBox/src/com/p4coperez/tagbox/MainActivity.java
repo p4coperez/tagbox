@@ -185,6 +185,7 @@ public class MainActivity extends Activity implements OnItemSelectedListener, On
 				    //Get element to show on AdapterElements
 				    elemento = new Elemento(getResources().getDrawable(R.drawable.ic_pencil),file.getName(), text.toString(),false);
 			        listelements.add(elemento);
+			        br.close();
 				 
 				}
 				catch (IOException e) {
